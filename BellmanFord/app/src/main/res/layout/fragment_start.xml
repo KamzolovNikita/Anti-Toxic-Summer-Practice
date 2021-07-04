@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="startViewModel"
+            type="com.example.android.bellmanford.start.StartViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_grey"
+        tools:context=".start.StartFragment">
+
+        <LinearLayout
+            android:id="@+id/fragment_start_llt_buttons_container"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_start_btn_try_algorithm"
+                style="@style/StartFragmentButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/btn_text_try_algorithm" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_start_btn_algorithm_info"
+                style="@style/StartFragmentButton"
+                android:onClick="@{() -> startViewModel.onInfoNavigate()}"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/btn_text_algorithm_info" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/fragment_start_btn_developers"
+                style="@style/StartFragmentButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="15dp"
+                android:onClick="@{() -> startViewModel.onDevelopersNavigate()}"
+                android:text="@string/btn_text_developers" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:importantForAccessibility="no"
+            android:paddingStart="@dimen/padding_fragment_start_logo"
+            android:paddingTop="@dimen/padding_fragment_start_logo"
+            android:paddingEnd="@dimen/padding_fragment_start_logo"
+            android:paddingBottom="@dimen/padding_fragment_start_logo"
+            android:src="@drawable/ic_start_screen_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/fragment_start_llt_buttons_container"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

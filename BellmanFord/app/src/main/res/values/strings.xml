@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BellmanFord</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="btn_text_try_algorithm">Опробовать алгоритм</string>
+    <string name="btn_text_developers">Разработчики</string>
+    <string name="btn_text_algorithm_info">Как работает?</string>
+
+
+    <string name="txt_developers_header">Программа была разработана в рамках практического курса университета ЛЭТИ.</string>
+    <string name="txt_developers_info">Разработчики: \nКамзолов Никита\nГладких Андрей\nМоисейченко Кирилл</string>
+    
+    <string name="txt_algorithm_name">Алгоритм Форда-Беллмана</string>
+
+    <string name="content_description_back_button">Кнопка назад</string>
+</resources>

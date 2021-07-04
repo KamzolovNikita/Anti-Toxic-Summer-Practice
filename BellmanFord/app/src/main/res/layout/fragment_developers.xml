@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="developersViewModel"
+            type="com.example.android.bellmanford.developers.DevelopersViewModel" />
+    </data>
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_grey">
+
+        <LinearLayout
+            android:layout_marginStart="@dimen/margin_fragment_developers_lt_start_end"
+            android:layout_marginEnd="@dimen/margin_fragment_developers_lt_start_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                style="@style/BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_15dp"
+                android:contentDescription="@string/content_description_back_button"
+                android:onClick="@{() -> developersViewModel.onBackNavigate()}"/>
+
+            <TextView
+                style="@style/TextAppearance.Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_developers_header" />
+
+            <TextView
+                style="@style/TextAppearance.Default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_developers_info"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</layout>
