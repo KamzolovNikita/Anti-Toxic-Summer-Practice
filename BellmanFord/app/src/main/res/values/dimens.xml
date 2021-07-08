@@ -29,4 +29,5 @@
     <dimen name="text_size_header">42sp</dimen>
     <dimen name="text_size_default">24sp</dimen>
     <dimen name="margin_top_15dp">15dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
 </resources>

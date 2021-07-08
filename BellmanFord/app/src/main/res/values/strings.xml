@@ -6,6 +6,9 @@
     <string name="btn_text_try_algorithm">Опробовать алгоритм</string>
     <string name="btn_text_developers">Разработчики</string>
     <string name="btn_text_algorithm_info">Как работает?</string>
+    <string name="btn_text_algo_step_back">Назад</string>
+    <string name="btn_text_algo_step_next">Вперед</string>
+    <string name="btn_text_algo_step_to_end">В конец</string>
 
 
     <string name="txt_developers_header">Программа была разработана в рамках практического курса университета ЛЭТИ.</string>
@@ -14,6 +17,12 @@
     <string name="txt_algorithm_name">Алгоритм Форда-Беллмана</string>
 
     <string name="content_description_back_button">Кнопка назад</string>
+    <string name="content_description_algo_step_button">Кнопка показать шаг алгоритма</string>
+    <string name="content_description_algo_info_button">Кнопка показать принцип работы алгоритма</string>
+
+    <string name="content_description_algo_step_back_button">Кнопка перейти к предыдущему шагу алгоритма</string>
+    <string name="content_description_algo_step_next_button">Кнопка перейти к следующему шагу алгоритма</string>
+    <string name="content_description_algo_step_to_end_button">Кнопка перейти к последнему шагу алгоритма</string>
 
     <string name="hint_vertex_name_input">Введите имя вершины</string>
     <string name="title_dialog_vertex_name_picker">Имя вершины</string>
