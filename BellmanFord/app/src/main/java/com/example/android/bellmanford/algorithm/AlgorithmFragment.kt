@@ -62,6 +62,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
 
 
 
+        viewModel.initDimensions(requireContext())
 
         binding.fragmentAlgorithmFltCanvas.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
@@ -79,17 +80,27 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
 
         }
 
+        viewModel.eventVertexAlreadyExist.observe(viewLifecycleOwner, {
+            if(it) {
+                vertexInitErrorToast(getString(R.string.toast_explanation_already_exist))
+                viewModel.onVertexAlreadyExistEventFinish()
+            }
+        })
+
         viewModel.pressedVertices.observe(viewLifecycleOwner, {
             if (it.first != null && it.second != null) {
                 val newLine = View(requireContext())
-                val newArrow = View(requireContext())
-                viewModel.setupEdge(
-                    newLine, newArrow, it.first as AppCompatButton,
-                    it.second as AppCompatButton
-                )
+                val newArrowPetal1 = View(requireContext())
+                val newArrowPetal2 = View(requireContext())
+                viewModel.setupEdge(newLine, newArrowPetal1, newArrowPetal2, it.second as AppCompatButton,
+                    it.first as AppCompatButton)
+
                 binding.fragmentAlgorithmFltCanvas.addView(newLine)
-                binding.fragmentAlgorithmFltCanvas.addView(newArrow)
+                binding.fragmentAlgorithmFltCanvas.addView(newArrowPetal1)
+                binding.fragmentAlgorithmFltCanvas.addView(newArrowPetal2)
                 viewModel.clearPressedVertices()
+
+
             }
         })
 
@@ -103,12 +114,10 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
             vertexInitErrorToast(getString(R.string.toast_explanation_name_not_entered))
             return
         }
-        val view = viewModel.setupVertex(newVertex, xClick, yClick, name)
-        if (view == null) {
-            vertexInitErrorToast(getString(R.string.toast_explanation_already_exist))
-        } else {
-            binding.fragmentAlgorithmFltCanvas.addView(view)
+        if(viewModel.setupVertex(newVertex, xClick, yClick, name)) {
+            binding.fragmentAlgorithmFltCanvas.addView(newVertex)
         }
+
 
     }
 
