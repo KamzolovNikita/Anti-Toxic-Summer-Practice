@@ -2,19 +2,20 @@ package com.example.android.bellmanford.algorithm
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.setMargins
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
 import com.example.android.bellmanford.databinding.FragmentAlgorithmBinding
 import com.example.android.bellmanford.dialogs.VertexNameDialogFragment
 import com.example.android.bellmanford.dialogs.VertexNameEntered
+
 
 class AlgorithmFragment : Fragment(), VertexNameEntered {
 
@@ -36,6 +37,30 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
         )
 
         viewModel = ViewModelProvider(this).get(AlgorithmViewModel::class.java)
+        binding.algorithmViewModel = viewModel
+
+        viewModel.eventBackNavigate.observe(viewLifecycleOwner, { event ->
+            if (event) {
+                findNavController().popBackStack()
+                viewModel.onBackNavigateFinish()
+            }
+        })
+
+        viewModel.eventAlgoStepShow.observe(viewLifecycleOwner, { event ->
+            if (event) {
+                showAlgoStepPopUp(binding.btnAlgoStep)
+                viewModel.onAlgoStepShowFinish()
+            }
+        })
+
+        viewModel.eventAlgoInfoShow.observe(viewLifecycleOwner, { event ->
+            if (event) {
+                showAlgoInfoPopUp(binding.btnAlgoInfo)
+                viewModel.onAlgoInfoShowFinish()
+            }
+        })
+
+
 
         viewModel.initDimensions(requireContext())
 
@@ -102,6 +127,53 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
             getString(R.string.toast_text_vertex_was_not_spawned, explanation),
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun showAlgoInfoPopUp(view: View) {
+
+        val popupView: View = LayoutInflater.from(activity).inflate(R.layout.algoinfo_popup, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        val exitButton = popupView.findViewById<ImageButton>(R.id.exit_button)
+
+        exitButton.setOnClickListener{
+            if (popupWindow.isShowing) {
+                popupWindow.dismiss()
+            }
+        }
+
+        popupWindow.animationStyle = R.style.PopUpAnimationFromBottom
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+    }
+
+    private fun showAlgoStepPopUp(view: View) {
+
+        val popupView: View = LayoutInflater.from(activity).inflate(R.layout.algostep_popup, null)
+
+
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            true
+        )
+
+        val exitButton = popupView.findViewById<ImageButton>(R.id.exit_button)
+
+        exitButton.setOnClickListener{
+            if (popupWindow.isShowing) {
+                popupWindow.dismiss()
+            }
+        }
+
+        popupWindow.animationStyle = R.style.PopUpAnimationFromLeft
+        popupWindow.showAtLocation(view, Gravity.LEFT, 0, 0)
     }
 }
 

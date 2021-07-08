@@ -1,6 +1,7 @@
 package com.example.android.bellmanford.algorithm
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatButton
@@ -24,6 +25,46 @@ enum class EdgeSpawnStates {
 }
 
 class AlgorithmViewModel : ViewModel() {
+
+    private val _eventBackNavigate = MutableLiveData<Boolean>()
+    val eventBackNavigate: LiveData<Boolean>
+        get() = _eventBackNavigate
+
+    fun onBackNavigate() {
+        Log.d("ALGO_VIEW_MODEL", "onBackNavigate()")
+        _eventBackNavigate.value = true
+    }
+
+    fun onBackNavigateFinish() {
+        _eventBackNavigate.value = false
+    }
+
+    private val _eventAlgoInfoShow = MutableLiveData<Boolean>()
+    val eventAlgoInfoShow: LiveData<Boolean>
+        get() = _eventAlgoInfoShow
+
+    fun onAlgoInfoShow() {
+        Log.d("ALGO_VIEW_MODEL", "onAlgoInfoShow()")
+        _eventAlgoInfoShow.value = true
+    }
+
+    fun onAlgoInfoShowFinish() {
+        _eventAlgoInfoShow.value = false
+    }
+
+    private val _eventAlgoStepShow = MutableLiveData<Boolean>()
+    val eventAlgoStepShow: LiveData<Boolean>
+        get() = _eventAlgoStepShow
+
+    fun onAlgoStepShow() {
+        Log.d("ALGO_VIEW_MODEL", "onAlgoStepShow()")
+        _eventAlgoStepShow.value = true
+    }
+
+    fun onAlgoStepShowFinish() {
+        _eventAlgoStepShow.value = false
+    }
+
 
     private val _pressedVertices = MutableLiveData<Pair<View?, View?>>()
     val pressedVertices: LiveData<Pair<View?, View?>>
