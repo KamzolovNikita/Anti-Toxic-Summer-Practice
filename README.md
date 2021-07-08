@@ -1,6 +1,7 @@
 # Summer Practice 2021, LETI. 
 
 <img src="https://github.com/KamzolovNikita/Anti-Toxic-Summer-Practice/blob/main/ats_logo.jpg" width="100">
+
 ## Anti-Toxic Software (c) 2020-2021
 
 ### Состав команды:
