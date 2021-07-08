@@ -1,11 +1,13 @@
 package com.example.android.bellmanford.algorithm
 
 import android.view.View
+import android.widget.TextView
 
 
 data class VertexNeighbour(
-    val name: String,
-    val length: Int
+    val edge: View,
+    val name: String
+    //val weight: TextView
 )
 
 data class Point(
@@ -15,6 +17,6 @@ data class Point(
 
 data class VertexInfo(
     val view: View,
-    val neighbours: MutableList<VertexNeighbour>?,
+    val neighbours: MutableList<VertexNeighbour>,
     val position: Point
 )
