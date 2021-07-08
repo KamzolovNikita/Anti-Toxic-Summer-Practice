@@ -11,4 +11,6 @@
 
     <!-- REAL COLORS -->
     <color name="background_grey">#E5E5E5</color>
+    <color name="main_pink">#EB5B71</color>
+    <color name="main_blue">#1EC4E9</color>
 </resources>

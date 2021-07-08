@@ -32,15 +32,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="15dp"
+                android:onClick="@{() -> startViewModel.onAlgorithmNavigate()}"
                 android:text="@string/btn_text_try_algorithm" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/fragment_start_btn_algorithm_info"
                 style="@style/StartFragmentButton"
-                android:onClick="@{() -> startViewModel.onInfoNavigate()}"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="15dp"
+                android:onClick="@{() -> startViewModel.onInfoNavigate()}"
                 android:text="@string/btn_text_algorithm_info" />
 
             <androidx.appcompat.widget.AppCompatButton

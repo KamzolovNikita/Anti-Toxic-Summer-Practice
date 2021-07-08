@@ -14,6 +14,17 @@
     <!-- ALGORITHM INFO FRAGMENT -->
     <dimen name="margin_fragment_info_lt_start_end">15dp</dimen>
 
+
+    <!-- DIALOG -->
+    <dimen name="margin_dialog_16dp">16dp</dimen>
+
+    <!-- ALGORITHM FRAGMENT -->
+    <dimen name="size_fragment_algorithm_vertex">45dp</dimen>
+    <dimen name="height_fragment_algorithm_edge">4dp</dimen>
+
+    <dimen name="height_fragment_algorithm_arrow">14dp</dimen>
+    <dimen name="width_fragment_algorithm_arrow">10dp</dimen>
+
     <!-- ANY FRAGMENT -->
     <dimen name="text_size_header">42sp</dimen>
     <dimen name="text_size_default">24sp</dimen>

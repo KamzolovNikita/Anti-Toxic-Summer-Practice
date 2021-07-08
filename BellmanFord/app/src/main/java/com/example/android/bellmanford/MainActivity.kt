@@ -13,6 +13,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        fullScreen()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        fullScreen()
+    }
+
     override fun onResume() {
         super.onResume()
         fullScreen()

@@ -14,6 +14,18 @@ class StartViewModel : ViewModel() {
     val eventDevelopersNavigate: LiveData<Boolean>
         get() = _eventDevelopersNavigate
 
+    private val _eventAlgorithmNavigate = MutableLiveData<Boolean>()
+    val eventAlgorithmNavigate: LiveData<Boolean>
+        get() = _eventAlgorithmNavigate
+
+
+    fun onAlgorithmNavigate() {
+        _eventAlgorithmNavigate.value = true
+    }
+
+    fun onAlgorithmNavigateFinish() {
+        _eventAlgorithmNavigate.value = false
+    }
 
     fun onInfoNavigate() {
         _eventInfoNavigate.value = true

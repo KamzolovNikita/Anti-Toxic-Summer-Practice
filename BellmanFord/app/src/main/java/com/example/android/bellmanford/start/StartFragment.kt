@@ -44,6 +44,12 @@ class StartFragment : Fragment() {
             }
         })
 
+        viewModel.eventAlgorithmNavigate.observe(viewLifecycleOwner, { event ->
+            if (event) {
+                findNavController().navigate(R.id.action_startFragment_to_algorithmFragment)
+                viewModel.onAlgorithmNavigateFinish()
+            }
+        })
 
         return binding.root
     }

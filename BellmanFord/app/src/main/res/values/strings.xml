@@ -10,8 +10,18 @@
 
     <string name="txt_developers_header">Программа была разработана в рамках практического курса университета ЛЭТИ.</string>
     <string name="txt_developers_info">Разработчики: \nКамзолов Никита\nГладких Андрей\nМоисейченко Кирилл</string>
-    
+
     <string name="txt_algorithm_name">Алгоритм Форда-Беллмана</string>
 
     <string name="content_description_back_button">Кнопка назад</string>
+
+    <string name="hint_vertex_name_input">Введите имя вершины</string>
+    <string name="title_dialog_vertex_name_picker">Имя вершины</string>
+    
+    <string name="txt_dialog_positive_button">Ок</string>
+    <string name="txt_dialog_negative_button">Отмена</string>
+
+    <string name="toast_text_vertex_was_not_spawned">Вершина не была создана (%s)</string>
+    <string name="toast_explanation_already_exist">вершина с таким именем уже существует</string>
+    <string name="toast_explanation_name_not_entered">имя вершины не введено</string>
 </resources>
