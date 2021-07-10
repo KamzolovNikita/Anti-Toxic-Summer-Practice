@@ -26,8 +26,6 @@ enum class EdgeSpawnStates {
     NOTHING_EXIST
 }
 
-
-
 class AlgorithmViewModel : ViewModel() {
 
 
@@ -219,6 +217,9 @@ class AlgorithmViewModel : ViewModel() {
         clearPressedVertices()
     }
 
+    fun algorithmMode() {
+        clearPressedVertices()
+    }
 
     //region edge creating
     fun setupEdge(

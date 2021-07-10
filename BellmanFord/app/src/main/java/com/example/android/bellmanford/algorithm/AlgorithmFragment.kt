@@ -77,10 +77,12 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             binding.fragmentAlgorithmImgBtnAlgorithmMode.visibility = View.VISIBLE
             viewModel.editingMode()
         }
+
         binding.fragmentAlgorithmImgBtnAlgorithmMode.setOnClickListener {
             viewModel.isEditing = false
             it.visibility = View.INVISIBLE
             binding.fragmentAlgorithmImgBtnEditingMode.visibility = View.VISIBLE
+            viewModel.algorithmMode()
             Toast.makeText(requireContext(), "Выберите начальную вершину", Toast.LENGTH_SHORT)
                 .show()
         }
