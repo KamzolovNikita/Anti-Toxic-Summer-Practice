@@ -3,66 +3,79 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/background_grey">
+        android:background="@color/background_grey"
+        android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/popup_algorithm_step_img_btn_close"
-            android:layout_marginTop="@dimen/margin_15dp"
-            android:layout_marginEnd="@dimen/margin_15dp"
-            android:layout_marginBottom="@dimen/margin_15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:layout_marginBottom="@dimen/margin_15dp"
             android:background="@drawable/btn_popup_exit" />
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_weight="1"
             android:id="@+id/popup_algorithm_step_rv_step_explanation"
             android:layout_width="300dp"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/view_rv_background"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <LinearLayout
-            android:layout_marginTop="@dimen/margin_15dp"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_15dp"
             android:orientation="horizontal">
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/popup_algorithm_step_img_btn_previous"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/margin_15dp"
                 android:layout_marginEnd="@dimen/margin_15dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_algorithm_previous_step" />
 
-            <ImageButton
+                android:background="@drawable/btn_algorithm_previous_step"
+                android:text="@string/btn_text_algo_step_back"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/popup_algorithm_step_img_btn_next"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="end"
                 android:layout_marginStart="@dimen/margin_15dp"
                 android:layout_marginEnd="@dimen/margin_15dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_algorithm_next_step" />
+                android:background="@drawable/btn_algorithm_next_step"
+                android:text="@string/btn_text_algo_step_next"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/popup_algorithm_step_img_btn_to_end"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_15dp"
             android:layout_marginBottom="@dimen/margin_15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_algorithm_to_end" />
+            android:background="@drawable/btn_algorithm_to_end"
+            android:text="@string/btn_text_algo_step_to_end"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
 
 
     </LinearLayout>

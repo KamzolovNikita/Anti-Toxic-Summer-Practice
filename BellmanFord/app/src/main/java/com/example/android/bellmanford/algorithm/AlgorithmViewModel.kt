@@ -5,11 +5,8 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
 import androidx.lifecycle.LiveData
@@ -122,6 +119,8 @@ class AlgorithmViewModel : ViewModel() {
     val algorithmSteps: LiveData<List<Step>>
         get() = _algorithmSteps
 
+    private var startVertexName = ""
+
     private var highlightedPath = listOf<String>()
 
     var isEditing = true
@@ -195,9 +194,13 @@ class AlgorithmViewModel : ViewModel() {
             }
         }
         else {
-            initGraph()
-            bellmanFordAlgorithm = BellmanFord(graph)
-            bellmanFordAlgorithm.runAlgorithm(vertexView.text.toString())
+            if(startVertexName == "") {
+                initGraph()
+                bellmanFordAlgorithm = BellmanFord(graph)
+                bellmanFordAlgorithm.runAlgorithm(vertexView.text.toString())
+                startVertexName = vertexView.text.toString()
+                vertexView.setBackgroundResource(highlightedVertexDrawable)
+            }
         }
     }
 
@@ -208,6 +211,14 @@ class AlgorithmViewModel : ViewModel() {
         adjacencyList[vertex.text.toString()] = VertexInfo(vertex, mutableListOf(), center)
     }
     //endregion
+
+    fun editingMode() {
+        startVertexName = ""
+        changePathColor(highlightedPath, defaultVertexDrawable, defaultEdgeDrawable)
+        _algorithmSteps.value = listOf()
+        clearPressedVertices()
+    }
+
 
     //region edge creating
     fun setupEdge(

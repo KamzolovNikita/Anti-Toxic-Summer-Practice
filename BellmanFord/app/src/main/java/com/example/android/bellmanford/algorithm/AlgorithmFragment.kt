@@ -75,6 +75,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             viewModel.isEditing = true
             it.visibility = View.INVISIBLE
             binding.fragmentAlgorithmImgBtnAlgorithmMode.visibility = View.VISIBLE
+            viewModel.editingMode()
         }
         binding.fragmentAlgorithmImgBtnAlgorithmMode.setOnClickListener {
             viewModel.isEditing = false

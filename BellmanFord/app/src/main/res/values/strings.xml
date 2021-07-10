@@ -35,8 +35,7 @@
     <string name="toast_explanation_name_not_entered">имя вершины не введено</string>
 
     <string name="txt_algorithm_step_default">
-        Рассматриваем путь %1$s - %2$s, старый вес - %3$d \n
-        Релаксируя ребро, можно дойти из %4$s до %5$s за %6$d
+        Рассматриваем путь %1$s - %2$s, старый вес - %3$d\nРелаксируя ребро, можно дойти из %4$s до %5$s за %6$d
     </string>
     <string name="txt_algorithm_step_negative_cycle">Нашли негативный цикл</string>
     <string name="txt_algorithm_path">Из вершины %1$s можно дойти до вершины %2$s за %3$d</string>
