@@ -62,6 +62,18 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             }
         })
 
+        binding.fragmentAlgorithmImgBtnEditingMode.setOnClickListener {
+            viewModel.isEditing = true
+            it.visibility = View.INVISIBLE
+            binding.fragmentAlgorithmImgBtnAlgorithmMode.visibility = View.VISIBLE
+        }
+        binding.fragmentAlgorithmImgBtnAlgorithmMode.setOnClickListener {
+            viewModel.isEditing = false
+            it.visibility = View.INVISIBLE
+            binding.fragmentAlgorithmImgBtnEditingMode.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), "Выберите начальную вершину", Toast.LENGTH_SHORT)
+                .show()
+        }
 
 
         viewModel.initDimensions(requireContext())
@@ -75,10 +87,13 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         }
 
         binding.fragmentAlgorithmFltCanvas.setOnClickListener {
-            val vertexNameDialogFragment = VertexNameDialogFragment(this)
-            activity?.let {
-                vertexNameDialogFragment.show(it.supportFragmentManager, "New vertex")
+            if(viewModel.isEditing) {
+                val vertexNameDialogFragment = VertexNameDialogFragment(this)
+                activity?.let {
+                    vertexNameDialogFragment.show(it.supportFragmentManager, "New vertex")
+                }
             }
+
 
         }
 
@@ -100,19 +115,16 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
                 )
                 if (isEdgeAlreadyExist != null) {
                     binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     val edgeWeightDialogFragment = EdgeWeightDialogFragment(this)
                     activity?.let { temp ->
                         edgeWeightDialogFragment.show(temp.supportFragmentManager, "New edge")
                     }
                 }
-            }
-            else if(it.first != null) {
+            } else if (it.first != null) {
                 binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.VISIBLE
                 binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.INVISIBLE
-            }
-            else {
+            } else {
                 binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.INVISIBLE
                 binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.INVISIBLE
             }

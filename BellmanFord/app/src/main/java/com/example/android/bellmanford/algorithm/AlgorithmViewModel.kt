@@ -25,6 +25,8 @@ enum class EdgeSpawnStates {
     NOTHING_EXIST
 }
 
+
+
 class AlgorithmViewModel : ViewModel() {
 
 
@@ -106,6 +108,10 @@ class AlgorithmViewModel : ViewModel() {
     private var edgeWeightTextSize = 0
 
     private val adjacencyList = mutableMapOf<String, VertexInfo>()
+    private lateinit var bellmanFordAlgorithm: BellmanFord
+    private var curStartVertex: String = ""
+
+    var isEditing = true
 
     fun initDimensions(context: Context) {
         vertexDiameter =
@@ -145,29 +151,36 @@ class AlgorithmViewModel : ViewModel() {
         initVertexInAdjacencyList(vertexView)
 
         vertexView.setOnClickListener {
-            vertexOnClickListener(it)
+            vertexOnClickListener(it as AppCompatButton)
         }
         return true
     }
 
-    private fun vertexOnClickListener(vertexView: View) {
-        val tempPair = _pressedVertices.value ?: Pair(null, null)
-        when (vertexView) {
-            tempPair.first -> {
-                vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
-                _pressedVertices.value = Pair(tempPair.second, null)
-            }
-            tempPair.second -> {
-                vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
-                _pressedVertices.value = Pair(tempPair.first, null)
-            }
+    private fun vertexOnClickListener(vertexView: AppCompatButton) {
+        if(isEditing) {
+            val tempPair = _pressedVertices.value ?: Pair(null, null)
+            when (vertexView) {
+                tempPair.first -> {
+                    vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
+                    _pressedVertices.value = Pair(tempPair.second, null)
+                }
+                tempPair.second -> {
+                    vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
+                    _pressedVertices.value = Pair(tempPair.first, null)
+                }
 
-            else -> {
-                vertexView.setBackgroundResource(R.drawable.img_graph_vertex_selected)
-                tempPair.second?.setBackgroundResource(R.drawable.img_graph_vertex)
-                _pressedVertices.value = Pair(vertexView, tempPair.first)
+                else -> {
+                    vertexView.setBackgroundResource(R.drawable.img_graph_vertex_selected)
+                    tempPair.second?.setBackgroundResource(R.drawable.img_graph_vertex)
+                    _pressedVertices.value = Pair(vertexView, tempPair.first)
 
+                }
             }
+        }
+        else {
+            initGraph()
+            bellmanFordAlgorithm = BellmanFord(graph)
+            bellmanFordAlgorithm.runAlgorithm(vertexView.text.toString())
         }
     }
 
@@ -411,16 +424,6 @@ class AlgorithmViewModel : ViewModel() {
         edge.setBackgroundResource(R.drawable.view_line)
     }
 
-    private fun calculateArrowPosition(point: Point, rotation: Double): Point {
-        val circumferentialOffsetX = vertexDiameter / 2 * cos(toRadians(rotation))
-        val circumferentialOffsetY = vertexDiameter / 2 * sin(toRadians(rotation))
-
-        return Point(
-            (point.x - circumferentialOffsetX).toInt(),
-            (point.y - circumferentialOffsetY).toInt()
-        )
-    }
-
     private fun initArrowPetal(
         arrowPetal: View,
         point: Point,
@@ -549,7 +552,7 @@ class AlgorithmViewModel : ViewModel() {
     }
     //endregion
 
-    fun initAlgorithm() {
+    fun initGraph() {
         val algorithmAdjacencyList = mutableMapOf<String, Neighbours>()
         adjacencyList.forEach {
             it.value.neighbours.forEach { vertexNeighbour ->
@@ -562,6 +565,7 @@ class AlgorithmViewModel : ViewModel() {
             }
 
         }
+        println(algorithmAdjacencyList)
         graph = Graph(algorithmAdjacencyList)
     }
 }
