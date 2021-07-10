@@ -5,7 +5,11 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
 import androidx.lifecycle.LiveData
@@ -106,10 +110,15 @@ class AlgorithmViewModel : ViewModel() {
     private var edgeArrowHeight = 0
     private var edgeArrowWidth = 0
     private var edgeWeightTextSize = 0
+    @DrawableRes private var defaultEdgeDrawable = 0
+    @DrawableRes private var defaultVertexDrawable = 0
+    @DrawableRes private var highlightedEdgeDrawable = 0
+    @DrawableRes private var highlightedVertexDrawable = 0
 
     private val adjacencyList = mutableMapOf<String, VertexInfo>()
     private lateinit var bellmanFordAlgorithm: BellmanFord
-    private var curStartVertex: String = ""
+
+    
 
     var isEditing = true
 
@@ -124,6 +133,10 @@ class AlgorithmViewModel : ViewModel() {
             context.resources.getDimension(R.dimen.width_fragment_algorithm_arrow).toInt()
         edgeWeightTextSize =
             context.resources.getDimension(R.dimen.text_size_fragment_algorithm_edge_weight).toInt()
+        defaultEdgeDrawable = R.drawable.view_line
+        defaultVertexDrawable = R.drawable.img_graph_vertex
+        highlightedEdgeDrawable = R.drawable.view_line_highlighted
+        highlightedVertexDrawable = R.drawable.img_graph_vertex_selected
     }
 
     //region vertex creating
@@ -489,7 +502,7 @@ class AlgorithmViewModel : ViewModel() {
         view.layoutParams = params
     }
 
-    fun getNeighbourAlreadyExist(
+    fun getNeighbour(
         firstVertexName: String,
         secondVertexName: String
     ): VertexNeighbour? {
@@ -510,7 +523,7 @@ class AlgorithmViewModel : ViewModel() {
             if (it.second != null && it.first != null) {
                 val firstButton = it.first as AppCompatButton
                 val secondButton = it.second as AppCompatButton
-                val neighbour = getNeighbourAlreadyExist(
+                val neighbour = getNeighbour(
                     secondButton.text.toString(),
                     firstButton.text.toString()
                 )
@@ -552,11 +565,13 @@ class AlgorithmViewModel : ViewModel() {
     }
     //endregion
 
-    fun initGraph() {
+    private fun initGraph() {
         val algorithmAdjacencyList = mutableMapOf<String, Neighbours>()
         adjacencyList.forEach {
+            algorithmAdjacencyList[it.key] = mutableListOf()
+
             it.value.neighbours.forEach { vertexNeighbour ->
-                algorithmAdjacencyList[it.key] = mutableListOf(
+                algorithmAdjacencyList[it.key]?.add(
                     Pair(
                         vertexNeighbour.name,
                         vertexNeighbour.weightView.text.toString().toInt()
@@ -565,7 +580,17 @@ class AlgorithmViewModel : ViewModel() {
             }
 
         }
-        println(algorithmAdjacencyList)
         graph = Graph(algorithmAdjacencyList)
+        changePathColor(arrayOf("A", "B"), highlightedVertexDrawable, highlightedEdgeDrawable)
+    }
+
+    private fun changePathColor(path: Array<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
+        for(i in path.indices - 1) {
+            adjacencyList[path[i]]?.vertexView?.setBackgroundResource(vertexDrawable)
+            val edge = getNeighbour(path[i], path[i+1])
+            edge?.firstArrowPetalView?.setBackgroundResource(edgeDrawable)
+            edge?.secondArrowPetalView?.setBackgroundResource(edgeDrawable)
+            edge?.edgeView?.setBackgroundResource(edgeDrawable)
+        }
     }
 }

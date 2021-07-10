@@ -1,12 +1,13 @@
 package com.example.android.bellmanford.algorithm
 
-data class StepData(val ChangedNodeFirst: String,
-           val ChangedNodeSecond: String,
-           val oldWeight: Int,
-           val newWeight: Int)
+data class StepData(val changedNodeFirst: String,
+                    val changedNodeSecond: String,
+                    val oldWeight: Int,
+                    val newWeight: Int)
 
 enum class StepMsg{
     NORMAL,
+    PATH,
     NEGATIVE_CYCLE
 }
 

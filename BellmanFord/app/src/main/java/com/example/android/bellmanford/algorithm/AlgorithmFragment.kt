@@ -110,7 +110,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
                 binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.INVISIBLE
                 val firstButton = it.first as AppCompatButton
                 val secondButton = it.second as AppCompatButton
-                val isEdgeAlreadyExist = viewModel.getNeighbourAlreadyExist(
+                val isEdgeAlreadyExist = viewModel.getNeighbour(
                     secondButton.text.toString(), firstButton.text.toString()
                 )
                 if (isEdgeAlreadyExist != null) {
