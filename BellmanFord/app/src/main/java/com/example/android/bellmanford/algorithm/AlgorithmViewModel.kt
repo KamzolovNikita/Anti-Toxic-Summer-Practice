@@ -1,9 +1,10 @@
 package com.example.android.bellmanford.algorithm
 
 import android.content.Context
-import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
@@ -26,12 +27,27 @@ enum class EdgeSpawnStates {
 
 class AlgorithmViewModel : ViewModel() {
 
+    private val _eventEdgeAlreadyExistError = MutableLiveData<Boolean>()
+    val eventEdgeAlreadyExistError: LiveData<Boolean>
+        get() = _eventEdgeAlreadyExistError
+
+    fun onEdgeAlreadyExistError() {
+        _eventEdgeAlreadyExistError.value = true
+    }
+
+    fun onEdgeAlreadyExistErrorFinish() {
+        _eventEdgeAlreadyExistError.value = false
+    }
+
+    private val _viewToIncreaseOnClickArea = MutableLiveData<View>()
+    val viewToIncreaseOnClickArea: LiveData<View>
+        get() = _viewToIncreaseOnClickArea
+
     private val _eventBackNavigate = MutableLiveData<Boolean>()
     val eventBackNavigate: LiveData<Boolean>
         get() = _eventBackNavigate
 
     fun onBackNavigate() {
-        Log.d("ALGO_VIEW_MODEL", "onBackNavigate()")
         _eventBackNavigate.value = true
     }
 
@@ -39,30 +55,28 @@ class AlgorithmViewModel : ViewModel() {
         _eventBackNavigate.value = false
     }
 
-    private val _eventAlgoInfoShow = MutableLiveData<Boolean>()
-    val eventAlgoInfoShow: LiveData<Boolean>
-        get() = _eventAlgoInfoShow
+    private val _eventAlgorithmInfoShow = MutableLiveData<Boolean>()
+    val eventAlgorithmInfoShow: LiveData<Boolean>
+        get() = _eventAlgorithmInfoShow
 
     fun onAlgoInfoShow() {
-        Log.d("ALGO_VIEW_MODEL", "onAlgoInfoShow()")
-        _eventAlgoInfoShow.value = true
+        _eventAlgorithmInfoShow.value = true
     }
 
     fun onAlgoInfoShowFinish() {
-        _eventAlgoInfoShow.value = false
+        _eventAlgorithmInfoShow.value = false
     }
 
-    private val _eventAlgoStepShow = MutableLiveData<Boolean>()
-    val eventAlgoStepShow: LiveData<Boolean>
-        get() = _eventAlgoStepShow
+    private val _eventAlgorithmStepShow = MutableLiveData<Boolean>()
+    val eventAlgorithmStepShow: LiveData<Boolean>
+        get() = _eventAlgorithmStepShow
 
     fun onAlgoStepShow() {
-        Log.d("ALGO_VIEW_MODEL", "onAlgoStepShow()")
-        _eventAlgoStepShow.value = true
+        _eventAlgorithmStepShow.value = true
     }
 
     fun onAlgoStepShowFinish() {
-        _eventAlgoStepShow.value = false
+        _eventAlgorithmStepShow.value = false
     }
 
 
@@ -78,6 +92,7 @@ class AlgorithmViewModel : ViewModel() {
     private var edgeLineHeight = 0
     private var edgeArrowHeight = 0
     private var edgeArrowWidth = 0
+    private var edgeWeightTextSize = 0
 
     private val adjacencyList = mutableMapOf<String, VertexInfo>()
 
@@ -90,6 +105,8 @@ class AlgorithmViewModel : ViewModel() {
             context.resources.getDimension(R.dimen.height_fragment_algorithm_arrow).toInt()
         edgeArrowWidth =
             context.resources.getDimension(R.dimen.width_fragment_algorithm_arrow).toInt()
+        edgeWeightTextSize =
+            context.resources.getDimension(R.dimen.text_size_fragment_algorithm_edge_weight).toInt()
     }
 
     fun onVertexAlreadyExistEvent() {
@@ -103,50 +120,53 @@ class AlgorithmViewModel : ViewModel() {
 
     //region vertex creating
     fun setupVertex(
-        vertex: AppCompatButton,
+        vertexView: AppCompatButton,
         xClick: Int,
         yClick: Int,
         vertexName: String
     ): Boolean {
         setViewLayoutParams(
-            vertex,
+            vertexView,
             vertexDiameter,
             vertexDiameter,
             xClick - vertexDiameter / 2,
             yClick - vertexDiameter / 2
         )
-        vertex.isClickable = true
-        vertex.setBackgroundResource(R.drawable.img_graph_vertex)
+        vertexView.isClickable = true
+        vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
 
-        vertex.text = vertexName.replace(" ", "").toUpperCase(Locale.ROOT).take(4)
-        if (adjacencyList.containsKey(vertex.text)) {
+        vertexView.text = vertexName.replace(" ", "").toUpperCase(Locale.ROOT).take(4)
+        if (adjacencyList.containsKey(vertexView.text)) {
             onVertexAlreadyExistEvent()
             return false
         }
-        initVertexInAdjacencyList(vertex)
+        initVertexInAdjacencyList(vertexView)
 
-        vertex.setOnClickListener {
-            val tempPair = _pressedVertices.value ?: Pair(null, null)
-            when (vertex) {
-                tempPair.first -> {
-                    vertex.setBackgroundResource(R.drawable.img_graph_vertex)
-                    _pressedVertices.value = Pair(tempPair.second, null)
-                }
-                tempPair.second -> {
-                    vertex.setBackgroundResource(R.drawable.img_graph_vertex)
-                    _pressedVertices.value = Pair(tempPair.first, null)
-                }
+        vertexView.setOnClickListener {
+            vertexOnClickListener(it)
+        }
+        return true
+    }
 
-                else -> {
-                    vertex.setBackgroundResource(R.drawable.img_graph_vertex_selected)
-                    tempPair.second?.setBackgroundResource(R.drawable.img_graph_vertex)
-                    _pressedVertices.value = Pair(vertex, tempPair.first)
+    private fun vertexOnClickListener(vertexView: View) {
+        val tempPair = _pressedVertices.value ?: Pair(null, null)
+        when (vertexView) {
+            tempPair.first -> {
+                vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
+                _pressedVertices.value = Pair(tempPair.second, null)
+            }
+            tempPair.second -> {
+                vertexView.setBackgroundResource(R.drawable.img_graph_vertex)
+                _pressedVertices.value = Pair(tempPair.first, null)
+            }
 
-                }
+            else -> {
+                vertexView.setBackgroundResource(R.drawable.img_graph_vertex_selected)
+                tempPair.second?.setBackgroundResource(R.drawable.img_graph_vertex)
+                _pressedVertices.value = Pair(vertexView, tempPair.first)
+
             }
         }
-
-        return true
     }
 
     private fun initVertexInAdjacencyList(vertex: AppCompatButton) {
@@ -159,114 +179,58 @@ class AlgorithmViewModel : ViewModel() {
 
     //region edge creating
     fun setupEdge(
-        edge: View,
-        arrowPetal1: View,
-        arrowPetal2: View,
-        firstVertex: AppCompatButton,
-        secondVertex: AppCompatButton
+        edgeView: View,
+        firstArrowPetalView: View,
+        secondArrowPetalView: View,
+        firstVertexView: AppCompatButton,
+        secondVertexView: AppCompatButton,
+        edgeWeightView: TextView
     ): Boolean {
-        val vertexInfo1: VertexInfo = adjacencyList.getOrElse(firstVertex.text.toString(), {
+        val vertexInfo1: VertexInfo = adjacencyList.getOrElse(firstVertexView.text.toString(), {
             return false
         })
-        val vertexInfo2: VertexInfo = adjacencyList.getOrElse(secondVertex.text.toString(), {
+        val vertexInfo2: VertexInfo = adjacencyList.getOrElse(secondVertexView.text.toString(), {
             return false
         })
+
         val point1 = vertexInfo1.position
         val point2 = vertexInfo2.position
 
         val length = findEdgeLength(point1, point2)
         val rotation = findEdgeRotation(point1, point2)
 
-        initLine(edge, point1, length, rotation)
-        initArrowPetal(arrowPetal1, point2, rotation, 30F)
-        initArrowPetal(arrowPetal2, point2, rotation, -30F)
-
         val edgeSpawnState =
             checkEdgesSpawnState(
                 vertexInfo1,
                 vertexInfo2,
-                firstVertex.text.toString(),
-                secondVertex.text.toString()
+                firstVertexView.text.toString(),
+                secondVertexView.text.toString()
             )
 
         if (edgeSpawnState == EdgeSpawnStates.ALREADY_EXIST) return false
 
-        adjacencyList[firstVertex.text.toString()]?.neighbours?.add(
-            VertexNeighbour(
-                edge,
-                secondVertex.text.toString()
-            )
+        initLine(edgeView, point1, length, rotation)
+        initArrowPetal(firstArrowPetalView, point2, rotation, 30F)
+        initArrowPetal(secondArrowPetalView, point2, rotation, -30F)
+        initWeight(edgeWeightView, edgeView, rotation, length)
+
+        val newVertexNeighbour = VertexNeighbour(
+            edgeView,
+            firstArrowPetalView,
+            secondArrowPetalView,
+            secondVertexView.text.toString(),
+            edgeWeightView
         )
+
+        initNeighbourInAdjacencyList(newVertexNeighbour, firstVertexView.text.toString())
+        println(adjacencyList)
 
         if (edgeSpawnState == EdgeSpawnStates.OPPOSITE_EXIST) {
-
-            getOppositeEdge(firstVertex.text.toString(), vertexInfo2)?.let {
-                moveEdgesToFit(
-                    VertexNeighbour(edge, firstVertex.text.toString()),
-                    it
-                )
+            getOppositeEdgeView(firstVertexView.text.toString(), vertexInfo2)?.let {
+                moveEdgeViewsToFit(newVertexNeighbour, it)
             }
         }
-
         return true
-    }
-
-    private fun moveEdgesToFit(firstEdge: VertexNeighbour, secondEdge: VertexNeighbour) {
-        val point1 = calculateEdgesPosition(
-                Point(firstEdge.edge.x.toInt(), firstEdge.edge.y.toInt()),
-        firstEdge.edge.rotation.toDouble(),
-        true
-        )
-        val point2 = calculateEdgesPosition(
-            Point(firstEdge.edge.x.toInt(), firstEdge.edge.y.toInt()),
-            firstEdge.edge.rotation.toDouble(),
-            false
-        )
-        println("hello")
-        var params = firstEdge.edge.layoutParams as FrameLayout.LayoutParams
-        println(params.topMargin)
-        println(params.leftMargin)
-        println(vertexDiameter * 3 / 8)
-        params.topMargin = params.topMargin + vertexDiameter * 3 / 8
-        //params.setMargins(firstEdge.edge.marginLeft , params.topMargin + 3 / 4 * vertexDiameter / 2, 0, 0)
-        println(firstEdge.edge)
-        println(params.topMargin)
-        println(params.leftMargin)
-        firstEdge.edge.layoutParams = params
-        params = secondEdge.edge.layoutParams as FrameLayout.LayoutParams
-        params.topMargin = params.topMargin - vertexDiameter * 3 / 8
-        params.setMargins(secondEdge.edge.marginLeft , secondEdge.edge.marginTop - 3 / 4 * vertexDiameter / 2, 0, 0)
-        secondEdge.edge.layoutParams = params
-    }
-
-    private fun calculateEdgesPosition(point: Point, rotation: Double, toTop: Boolean): Point {
-        val circumferentialOffsetX = 3 / 4 * vertexDiameter / 2 * cos(toRadians(rotation))
-        val circumferentialOffsetY = 3 / 4 * vertexDiameter / 2 * sin(toRadians(rotation))
-        return when (toTop) {
-            false -> {
-                Point(
-                    (point.x - circumferentialOffsetX).toInt(),
-                    (point.y - circumferentialOffsetY).toInt()
-                )
-            }
-            true -> {
-                Point(
-                    (point.x + circumferentialOffsetX).toInt(),
-                    (point.y + circumferentialOffsetY).toInt()
-                )
-            }
-        }
-    }
-
-    private fun getOppositeEdge(
-        oppositeVertexName: String,
-        vertexInfo: VertexInfo
-    ): VertexNeighbour? {
-        vertexInfo.neighbours.forEach {
-            if (it.name == oppositeVertexName)
-                return it
-        }
-        return null
     }
 
     private fun checkEdgesSpawnState(
@@ -276,7 +240,6 @@ class AlgorithmViewModel : ViewModel() {
         secondVertexName: String
     ): EdgeSpawnStates {
         vertexInfo1.neighbours.forEach {
-            println(it.name)
             if (it.name == secondVertexName)
                 return EdgeSpawnStates.ALREADY_EXIST
         }
@@ -287,9 +250,142 @@ class AlgorithmViewModel : ViewModel() {
         return EdgeSpawnStates.NOTHING_EXIST
     }
 
-    private fun initEdgesInAdjacencyMap() {
-
+    private fun getOppositeEdgeView(
+        oppositeVertexName: String,
+        vertexInfo: VertexInfo
+    ): VertexNeighbour? {
+        vertexInfo.neighbours.forEach {
+            if (it.name == oppositeVertexName) {
+                return it
+            }
+        }
+        return null
     }
+
+    private fun initNeighbourInAdjacencyList(
+        vertexNeighbour: VertexNeighbour,
+        firstVertexName: String
+    ) {
+        adjacencyList[firstVertexName]?.neighbours?.add(vertexNeighbour)
+    }
+
+    private fun initWeight(edgeWeightView: TextView, edgeView: View, rotation: Float, edgeLength: Int) {
+        val offset = calculateOffsetBasedOnAngle(edgeLength / 2, rotation.toDouble(), false)
+
+        setViewLayoutParams(
+            edgeWeightView,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            edgeView.marginLeft + offset.x,
+            edgeView.marginTop + offset.y
+        )
+
+        edgeWeightView.pivotX = 0F
+        edgeWeightView.isClickable = true
+
+        if (abs(rotation) > 90) edgeWeightView.rotation = 180 + rotation
+        else edgeWeightView.rotation = rotation
+
+        edgeWeightView.setTextSize(TypedValue.COMPLEX_UNIT_PX, edgeWeightTextSize.toFloat())
+    }
+
+    private fun calculateOffsetBasedOnAngle(
+        radius: Int,
+        rotation: Double,
+        inverse: Boolean
+    ): Point {
+        val offsetX = radius * kotlin.math.cos(toRadians(rotation))
+        val offsetY = radius * kotlin.math.sin(toRadians(rotation))
+        return when (inverse) {
+            false -> Point(offsetX.toInt(), offsetY.toInt())
+            true -> Point(offsetY.toInt(), offsetX.toInt())
+        }
+    }
+
+    private fun changeMargins(point: Point, view: View) {
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.setMargins(
+            point.x,
+            point.y,
+            0,
+            0
+        )
+    }
+
+
+    private fun moveEdgeViewsToFit(firstEdge: VertexNeighbour, secondEdge: VertexNeighbour) {
+        val firstOffset = calculateOffsetBasedOnAngle(
+            vertexDiameter * 3 / 8,
+            firstEdge.edgeView.rotation.toDouble(),
+            true
+        )
+        val secondOffset = calculateOffsetBasedOnAngle(
+            vertexDiameter * 3 / 8,
+            secondEdge.edgeView.rotation.toDouble(),
+            true
+        )
+
+        //move lines
+        changeMargins(
+            Point(
+                firstEdge.edgeView.marginLeft - firstOffset.x,
+                firstEdge.edgeView.marginTop + firstOffset.y
+            ), firstEdge.edgeView
+        )
+
+        changeMargins(
+            Point(
+                secondEdge.edgeView.marginLeft - secondOffset.x,
+                secondEdge.edgeView.marginTop + secondOffset.y
+            ), secondEdge.edgeView
+        )
+
+
+        //move arrow
+        changeMargins(
+            Point(
+                firstEdge.firstArrowPetalView.marginLeft - firstOffset.x,
+                firstEdge.firstArrowPetalView.marginTop + firstOffset.y,
+            ), firstEdge.firstArrowPetalView
+        )
+
+        changeMargins(
+            Point(
+                secondEdge.firstArrowPetalView.marginLeft - secondOffset.x,
+                secondEdge.firstArrowPetalView.marginTop + secondOffset.y,
+            ), secondEdge.firstArrowPetalView
+        )
+
+        changeMargins(
+            Point(
+                firstEdge.secondArrowPetalView.marginLeft - firstOffset.x,
+                firstEdge.secondArrowPetalView.marginTop + firstOffset.y,
+            ), firstEdge.secondArrowPetalView
+        )
+
+        changeMargins(
+            Point(
+                secondEdge.secondArrowPetalView.marginLeft - secondOffset.x,
+                secondEdge.secondArrowPetalView.marginTop + secondOffset.y,
+            ), secondEdge.secondArrowPetalView
+        )
+
+        //move weight
+        changeMargins(
+            Point(
+                firstEdge.weightView.marginLeft - firstOffset.x,
+                firstEdge.weightView.marginTop + firstOffset.y,
+            ), firstEdge.weightView
+        )
+
+        changeMargins(
+            Point(
+                secondEdge.weightView.marginLeft - secondOffset.x,
+                secondEdge.weightView.marginTop + secondOffset.y,
+            ), secondEdge.weightView
+        )
+    }
+
 
     private fun initLine(edge: View, point: Point, length: Int, rotation: Float) {
         setViewLayoutParams(
@@ -303,6 +399,8 @@ class AlgorithmViewModel : ViewModel() {
         edge.pivotX = 0F
         edge.pivotY = edge.resources.getDimension(R.dimen.height_fragment_algorithm_edge) / 2
         edge.rotation = rotation
+
+
         edge.setBackgroundResource(R.drawable.view_line)
     }
 
@@ -322,14 +420,14 @@ class AlgorithmViewModel : ViewModel() {
         rotation: Float,
         additionalRotation: Float
     ) {
-        val pointWithDeviation =
-            calculateArrowPosition(point, rotation.toDouble())
+        val offset =
+            calculateOffsetBasedOnAngle(vertexDiameter / 2, rotation.toDouble(), false)
         setViewLayoutParams(
             arrowPetal,
             edgeArrowWidth,
             edgeArrowHeight,
-            pointWithDeviation.x,
-            pointWithDeviation.y
+            point.x - offset.x,
+            point.y - offset.y
         )
         arrowPetal.pivotY = (edgeArrowHeight / 2).toFloat()
         arrowPetal.pivotX = 0F
@@ -380,4 +478,5 @@ class AlgorithmViewModel : ViewModel() {
         params.setMargins(x, y, 0, 0)
         view.layoutParams = params
     }
+
 }

@@ -8,33 +8,29 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.widget.EditText
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import com.example.android.bellmanford.R
 import com.example.android.bellmanford.util.AppFullscreen
 
-class VertexNameDialogFragment(val nameEntered: VertexNameEntered) : DialogFragment() {
-
-
+class EdgeWeightDialogFragment(val edgeWeightEntered: EdgeWeightEntered) : DialogFragment(){
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
 
 
             val builder = AlertDialog.Builder(it)
 
-            val newVertexNameDialogView =
-                layoutInflater.inflate(R.layout.dialog_vertex_name_picker, null)
+            val newEdgeWeightDialogView =
+                layoutInflater.inflate(R.layout.dialog_edge_weight_picker, null)
 
-            val nameEditText =
-                newVertexNameDialogView.findViewById<EditText>(R.id.dialog_vertex_name_picker_et_name)
+            val weightEditText =
+                newEdgeWeightDialogView.findViewById<EditText>(R.id.dialog_vertex_name_picker_et_name)
 
-            builder.setView(newVertexNameDialogView)
-                .setTitle(getString(R.string.title_dialog_vertex_name_picker))
+            builder.setView(newEdgeWeightDialogView)
+                .setTitle(getString(R.string.title_dialog_edge_weight_picker))
                 .setPositiveButton(
                     getString(R.string.txt_dialog_positive_button)
                 ) { _, _ ->
-                    nameEntered.receiveName(nameEditText.text.toString())
+                    edgeWeightEntered.receiveWeight(weightEditText.text.toString())
                     dialog?.cancel()
                 }
                 .setNegativeButton(
@@ -44,6 +40,7 @@ class VertexNameDialogFragment(val nameEntered: VertexNameEntered) : DialogFragm
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+
     }
 
     override fun onDetach() {
@@ -52,6 +49,6 @@ class VertexNameDialogFragment(val nameEntered: VertexNameEntered) : DialogFragm
     }
 }
 
-interface VertexNameEntered {
-    fun receiveName(name: String)
+interface EdgeWeightEntered {
+    fun receiveWeight(weight: String)
 }

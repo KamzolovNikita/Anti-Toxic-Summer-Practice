@@ -5,9 +5,11 @@ import android.widget.TextView
 
 
 data class VertexNeighbour(
-    val edge: View,
-    val name: String
-    //val weight: TextView
+    val edgeView: View,
+    val firstArrowPetalView: View,
+    val secondArrowPetalView: View,
+    val name: String,
+    val weightView: TextView
 )
 
 data class Point(
@@ -16,7 +18,7 @@ data class Point(
 )
 
 data class VertexInfo(
-    val view: View,
+    val vertexView: View,
     val neighbours: MutableList<VertexNeighbour>,
     val position: Point
 )

@@ -3,21 +3,23 @@ package com.example.android.bellmanford.algorithm
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.setMargins
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
 import com.example.android.bellmanford.databinding.FragmentAlgorithmBinding
+import com.example.android.bellmanford.dialogs.EdgeWeightDialogFragment
+import com.example.android.bellmanford.dialogs.EdgeWeightEntered
 import com.example.android.bellmanford.dialogs.VertexNameDialogFragment
 import com.example.android.bellmanford.dialogs.VertexNameEntered
+import com.example.android.bellmanford.util.AppFullscreen
 
 
-class AlgorithmFragment : Fragment(), VertexNameEntered {
+class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
     private lateinit var binding: FragmentAlgorithmBinding
     private lateinit var viewModel: AlgorithmViewModel
@@ -46,14 +48,14 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
             }
         })
 
-        viewModel.eventAlgoStepShow.observe(viewLifecycleOwner, { event ->
+        viewModel.eventAlgorithmStepShow.observe(viewLifecycleOwner, { event ->
             if (event) {
                 showAlgoStepPopUp(binding.btnAlgoStep)
                 viewModel.onAlgoStepShowFinish()
             }
         })
 
-        viewModel.eventAlgoInfoShow.observe(viewLifecycleOwner, { event ->
+        viewModel.eventAlgorithmInfoShow.observe(viewLifecycleOwner, { event ->
             if (event) {
                 showAlgoInfoPopUp(binding.btnAlgoInfo)
                 viewModel.onAlgoInfoShowFinish()
@@ -81,26 +83,19 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
         }
 
         viewModel.eventVertexAlreadyExist.observe(viewLifecycleOwner, {
-            if(it) {
+            if (it) {
                 vertexInitErrorToast(getString(R.string.toast_explanation_already_exist))
                 viewModel.onVertexAlreadyExistEventFinish()
             }
         })
 
+
         viewModel.pressedVertices.observe(viewLifecycleOwner, {
             if (it.first != null && it.second != null) {
-                val newLine = View(requireContext())
-                val newArrowPetal1 = View(requireContext())
-                val newArrowPetal2 = View(requireContext())
-                viewModel.setupEdge(newLine, newArrowPetal1, newArrowPetal2, it.second as AppCompatButton,
-                    it.first as AppCompatButton)
-
-                binding.fragmentAlgorithmFltCanvas.addView(newLine)
-                binding.fragmentAlgorithmFltCanvas.addView(newArrowPetal1)
-                binding.fragmentAlgorithmFltCanvas.addView(newArrowPetal2)
-                viewModel.clearPressedVertices()
-
-
+                val edgeWeightDialogFragment = EdgeWeightDialogFragment(this)
+                activity?.let {
+                    edgeWeightDialogFragment.show(it.supportFragmentManager, "New edge")
+                }
             }
         })
 
@@ -114,11 +109,38 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
             vertexInitErrorToast(getString(R.string.toast_explanation_name_not_entered))
             return
         }
-        if(viewModel.setupVertex(newVertex, xClick, yClick, name)) {
+        if (viewModel.setupVertex(newVertex, xClick, yClick, name)) {
             binding.fragmentAlgorithmFltCanvas.addView(newVertex)
         }
 
 
+    }
+
+    override fun receiveWeight(weight: String) {
+        val newLine = View(requireContext())
+        val firstArrowPetal = View(requireContext())
+        val secondArrowPetal = View(requireContext())
+        val edgeWeight = TextView(requireContext())
+        edgeWeight.text = weight
+        viewModel.setupEdge(
+            newLine,
+            firstArrowPetal,
+            secondArrowPetal,
+            viewModel.pressedVertices.value?.second as AppCompatButton,
+            viewModel.pressedVertices.value?.first as AppCompatButton,
+            edgeWeight
+        )
+
+        edgeWeight.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_blue))
+
+
+        binding.fragmentAlgorithmFltCanvas.addView(newLine)
+        binding.fragmentAlgorithmFltCanvas.addView(firstArrowPetal)
+        binding.fragmentAlgorithmFltCanvas.addView(secondArrowPetal)
+        binding.fragmentAlgorithmFltCanvas.addView(edgeWeight)
+        edgeWeight.bringToFront()
+
+        viewModel.clearPressedVertices()
     }
 
     private fun vertexInitErrorToast(explanation: String) {
@@ -142,7 +164,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
 
         val exitButton = popupView.findViewById<ImageButton>(R.id.exit_button)
 
-        exitButton.setOnClickListener{
+        exitButton.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
@@ -150,6 +172,14 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
 
         popupWindow.animationStyle = R.style.PopUpAnimationFromBottom
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+        popupWindow.setOnDismissListener {
+            AppFullscreen.turnFullscreen(requireActivity())
+        }
+    }
+
+    override fun onResume() {
+        println("ASDASDASDASD")
+        super.onResume()
     }
 
     private fun showAlgoStepPopUp(view: View) {
@@ -166,14 +196,18 @@ class AlgorithmFragment : Fragment(), VertexNameEntered {
 
         val exitButton = popupView.findViewById<ImageButton>(R.id.exit_button)
 
-        exitButton.setOnClickListener{
+        exitButton.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
         }
 
         popupWindow.animationStyle = R.style.PopUpAnimationFromLeft
-        popupWindow.showAtLocation(view, Gravity.LEFT, 0, 0)
+        popupWindow.showAtLocation(view, Gravity.START, 0, 0)
+
+        popupWindow.setOnDismissListener {
+            AppFullscreen.turnFullscreen(requireActivity())
+        }
     }
 }
 

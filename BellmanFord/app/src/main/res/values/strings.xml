@@ -24,6 +24,8 @@
     <string name="content_description_algo_step_next_button">Кнопка перейти к следующему шагу алгоритма</string>
     <string name="content_description_algo_step_to_end_button">Кнопка перейти к последнему шагу алгоритма</string>
 
+    <string name="hint_edge_weigt_input">Введите вес вершины</string>
+    <string name="title_dialog_edge_weight_picker">Вес вершины</string>
     <string name="hint_vertex_name_input">Введите имя вершины</string>
     <string name="title_dialog_vertex_name_picker">Имя вершины</string>
     

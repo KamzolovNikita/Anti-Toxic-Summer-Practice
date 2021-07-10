@@ -24,6 +24,7 @@
 
     <dimen name="height_fragment_algorithm_arrow">4dp</dimen>
     <dimen name="width_fragment_algorithm_arrow">12dp</dimen>
+    <dimen name="text_size_fragment_algorithm_edge_weight">20sp</dimen>
 
     <!-- ANY FRAGMENT -->
     <dimen name="text_size_header">42sp</dimen>
