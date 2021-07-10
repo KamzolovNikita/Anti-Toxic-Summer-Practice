@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
+import com.example.android.bellmanford.databinding.AlgostepPopupBinding
 import com.example.android.bellmanford.databinding.FragmentAlgorithmBinding
 import com.example.android.bellmanford.dialogs.EdgeWeightDialogFragment
 import com.example.android.bellmanford.dialogs.EdgeWeightEntered
@@ -23,6 +24,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
     private lateinit var binding: FragmentAlgorithmBinding
     private lateinit var viewModel: AlgorithmViewModel
+    private lateinit var adapter: AlgorithmStepAdapter
 
     private var xClick = 0
     private var yClick = 0
@@ -39,6 +41,11 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         )
 
         viewModel = ViewModelProvider(this).get(AlgorithmViewModel::class.java)
+
+        adapter = AlgorithmStepAdapter()
+        viewModel.algorithmSteps.value?.let {
+            adapter.data = it
+        }
         binding.algorithmViewModel = viewModel
 
         viewModel.eventBackNavigate.observe(viewLifecycleOwner, { event ->
@@ -74,7 +81,6 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             Toast.makeText(requireContext(), "Выберите начальную вершину", Toast.LENGTH_SHORT)
                 .show()
         }
-
 
         viewModel.initDimensions(requireContext())
 
@@ -233,20 +239,21 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
     }
 
     private fun showAlgorithmStepPopUp(view: View) {
-
-        val popupView: View = LayoutInflater.from(activity).inflate(R.layout.algostep_popup, null)
-
+        val binding = DataBindingUtil.inflate<AlgostepPopupBinding>(layoutInflater,
+            R.layout.algostep_popup, null, false
+        )
+        binding.popupAlgorithmStepRvStepExplanation.adapter = adapter
 
         val popupWindow = PopupWindow(
-            popupView,
+            binding.root,
+
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.MATCH_PARENT,
             true
         )
 
-        val exitButton = popupView.findViewById<ImageButton>(R.id.exit_button)
 
-        exitButton.setOnClickListener {
+        binding.popupAlgorithmStepImgBtnClose.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
@@ -259,7 +266,6 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             AppFullscreen.turnFullscreen(requireActivity())
         }
     }
-
 
 }
 

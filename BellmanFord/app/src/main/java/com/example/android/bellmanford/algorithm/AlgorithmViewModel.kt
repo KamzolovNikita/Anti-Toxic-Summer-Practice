@@ -118,7 +118,9 @@ class AlgorithmViewModel : ViewModel() {
     private val adjacencyList = mutableMapOf<String, VertexInfo>()
     private lateinit var bellmanFordAlgorithm: BellmanFord
 
-    
+    private val _algorithmSteps = MutableLiveData<List<Step>>()
+    val algorithmSteps: LiveData<List<Step>>
+        get() = _algorithmSteps
 
     var isEditing = true
 
@@ -581,10 +583,10 @@ class AlgorithmViewModel : ViewModel() {
 
         }
         graph = Graph(algorithmAdjacencyList)
-        changePathColor(arrayOf("A", "B"), highlightedVertexDrawable, highlightedEdgeDrawable)
     }
+    
 
-    private fun changePathColor(path: Array<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
+    private fun changePathColor(path: List<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
         for(i in path.indices - 1) {
             adjacencyList[path[i]]?.vertexView?.setBackgroundResource(vertexDrawable)
             val edge = getNeighbour(path[i], path[i+1])

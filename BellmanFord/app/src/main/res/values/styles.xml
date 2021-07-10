@@ -46,7 +46,7 @@
     </style>
 
     <style name="AlgorithmStepBackButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/btn_blue_background</item>
+        <item name="android:background">@drawable/btn_algorithm_next_step</item>
         <item name="android:paddingEnd">5dp</item>
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingBottom">5dp</item>
@@ -56,7 +56,7 @@
     </style>
 
     <style name="AlgorithmStepNextButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/btn_red_background</item>
+        <item name="android:background">@drawable/btn_algorithm_previous_step</item>
         <item name="android:paddingEnd">5dp</item>
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingBottom">5dp</item>
@@ -66,7 +66,7 @@
     </style>
 
     <style name="AlgorithmStepToEndButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/btn_purple_background</item>
+        <item name="android:background">@drawable/btn_algorithm_to_end</item>
         <item name="android:paddingEnd">5dp</item>
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingBottom">5dp</item>

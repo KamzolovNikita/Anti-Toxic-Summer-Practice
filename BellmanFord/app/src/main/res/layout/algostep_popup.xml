@@ -1,115 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_15dp"
-        android:background="@color/background_grey"
-        android:gravity="center"
+    <LinearLayout
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/popup_algorithm_step_img_btn_close"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/btn_popup_exit" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_weight="1"
+            android:id="@+id/popup_algorithm_step_rv_step_explanation"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <pl.droidsonroids.gif.GifImageView
+            <ImageButton
+                android:id="@+id/popup_algorithm_step_img_btn_previous"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/papichgif">
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin_15dp"
+                android:layout_marginEnd="@dimen/margin_15dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_algorithm_previous_step" />
 
-            </pl.droidsonroids.gif.GifImageView>
+            <ImageButton
+                android:id="@+id/popup_algorithm_step_img_btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="@dimen/margin_15dp"
+                android:layout_marginEnd="@dimen/margin_15dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_algorithm_next_step" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_algo_step_back"
-                style="@style/AlgorithmStepBackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_15dp"
-                android:layout_weight="1"
-                android:text="@string/btn_text_algo_step_back"
-                android:textAppearance="@style/TextAppearance.Default"
+        <ImageButton
+            android:id="@+id/popup_algorithm_step_img_btn_to_end"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_algorithm_to_end" />
 
 
-                android:contentDescription="@string/content_description_algo_step_back_button" />
+    </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_algo_step_next"
-                style="@style/AlgorithmStepNextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="@dimen/margin_15dp"
-                android:text="@string/btn_text_algo_step_next"
-                android:textAppearance="@style/TextAppearance.Default"
-                android:contentDescription="@string/content_description_algo_step_next_button" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_algo_step_to_end"
-                style="@style/AlgorithmStepToEndButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/btn_text_algo_step_to_end"
-                android:textAppearance="@style/TextAppearance.Default"
-                android:layout_marginHorizontal="@dimen/margin_15dp"
-
-                android:contentDescription="@string/content_description_algo_step_to_end_button" />
-
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageButton
-        android:id="@+id/exit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_popup_exit"
-
-        app:layout_constraintEnd_toEndOf="@id/linearLayout2"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-    </ImageButton>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

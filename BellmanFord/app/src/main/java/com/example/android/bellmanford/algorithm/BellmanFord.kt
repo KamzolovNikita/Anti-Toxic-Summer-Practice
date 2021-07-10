@@ -1,9 +1,9 @@
 package com.example.android.bellmanford.algorithm
 
-data class StepData(val changedNodeFirst: String,
-                    val changedNodeSecond: String,
-                    val oldWeight: Int,
-                    val newWeight: Int)
+data class StepData(val firstVertexParam: String,
+                    val secondVertexParam: String,
+                    val firstWeightParam: Int,
+                    val secondWeightParam: Int)
 
 enum class StepMsg{
     NORMAL,
@@ -13,15 +13,15 @@ enum class StepMsg{
 
 class Step {
     constructor(stepMsg: StepMsg) {
-        _stepMsg = stepMsg
+        this.stepMsg = stepMsg
     }
     constructor(stepMsg: StepMsg, stepData: StepData) {
-        _stepMsg = stepMsg
-        _stepData = stepData
+        this.stepMsg = stepMsg
+        this.stepData = stepData
     }
 
-    private lateinit var _stepMsg: StepMsg
-    private lateinit var _stepData: StepData
+    lateinit var stepMsg: StepMsg
+    lateinit var stepData: StepData
 }
 
 // A class to represent a connected, directed and weighted graph
