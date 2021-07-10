@@ -14,4 +14,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         AppFullscreen.turnFullscreen(this)
     }
+
+    override fun onRestart() {
+        super.onRestart()
+        AppFullscreen.turnFullscreen(this)
+    }
 }

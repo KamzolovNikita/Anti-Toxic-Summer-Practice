@@ -50,15 +50,15 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
         viewModel.eventAlgorithmStepShow.observe(viewLifecycleOwner, { event ->
             if (event) {
-                showAlgoStepPopUp(binding.btnAlgoStep)
-                viewModel.onAlgoStepShowFinish()
+                showAlgorithmStepPopUp(binding.btnAlgoStep)
+                viewModel.onAlgorithmStepShowFinish()
             }
         })
 
         viewModel.eventAlgorithmInfoShow.observe(viewLifecycleOwner, { event ->
             if (event) {
-                showAlgoInfoPopUp(binding.btnAlgoInfo)
-                viewModel.onAlgoInfoShowFinish()
+                showAlgorithmInfoPopUp(binding.btnAlgoInfo)
+                viewModel.onAlgorithmInfoShowFinish()
             }
         })
 
@@ -92,15 +92,58 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
         viewModel.pressedVertices.observe(viewLifecycleOwner, {
             if (it.first != null && it.second != null) {
-                val edgeWeightDialogFragment = EdgeWeightDialogFragment(this)
-                activity?.let {
-                    edgeWeightDialogFragment.show(it.supportFragmentManager, "New edge")
+                binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.INVISIBLE
+                val firstButton = it.first as AppCompatButton
+                val secondButton = it.second as AppCompatButton
+                val isEdgeAlreadyExist = viewModel.getNeighbourAlreadyExist(
+                    secondButton.text.toString(), firstButton.text.toString()
+                )
+                if (isEdgeAlreadyExist != null) {
+                    binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.VISIBLE
                 }
+                else {
+                    val edgeWeightDialogFragment = EdgeWeightDialogFragment(this)
+                    activity?.let { temp ->
+                        edgeWeightDialogFragment.show(temp.supportFragmentManager, "New edge")
+                    }
+                }
+            }
+            else if(it.first != null) {
+                binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.VISIBLE
+                binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.INVISIBLE
+            }
+            else {
+                binding.fragmentAlgorithmImgBtnDeleteVertex.visibility = View.INVISIBLE
+                binding.fragmentAlgorithmImgBtnDeleteEdge.visibility = View.INVISIBLE
             }
         })
 
+        binding.fragmentAlgorithmImgBtnDeleteVertex.setOnClickListener {
+            val viewsToDelete = viewModel.deleteChosenVertex()
+            viewsToDelete?.let {
+                it.forEach { view ->
+                    deleteViews(view)
+                }
+            }
+            viewModel.clearPressedVertices()
+        }
+
+        binding.fragmentAlgorithmImgBtnDeleteEdge.setOnClickListener {
+            val viewsToDelete = viewModel.deleteChosenEdge()
+            viewsToDelete?.let {
+                it.forEach { view ->
+                    deleteViews(view)
+                }
+            }
+            viewModel.clearPressedVertices()
+        }
+
 
         return binding.root
+    }
+
+    private fun deleteViews(view: View) {
+        binding.fragmentAlgorithmFltCanvas.removeView(view)
     }
 
     override fun receiveName(name: String) {
@@ -151,7 +194,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         ).show()
     }
 
-    private fun showAlgoInfoPopUp(view: View) {
+    private fun showAlgorithmInfoPopUp(view: View) {
 
         val popupView: View = LayoutInflater.from(activity).inflate(R.layout.algoinfo_popup, null)
 
@@ -177,12 +220,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         }
     }
 
-    override fun onResume() {
-        println("ASDASDASDASD")
-        super.onResume()
-    }
-
-    private fun showAlgoStepPopUp(view: View) {
+    private fun showAlgorithmStepPopUp(view: View) {
 
         val popupView: View = LayoutInflater.from(activity).inflate(R.layout.algostep_popup, null)
 
@@ -209,5 +247,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             AppFullscreen.turnFullscreen(requireActivity())
         }
     }
+
+
 }
 

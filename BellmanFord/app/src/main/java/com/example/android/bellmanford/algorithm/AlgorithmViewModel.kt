@@ -27,6 +27,8 @@ enum class EdgeSpawnStates {
 
 class AlgorithmViewModel : ViewModel() {
 
+
+    //region onClick events
     private val _eventEdgeAlreadyExistError = MutableLiveData<Boolean>()
     val eventEdgeAlreadyExistError: LiveData<Boolean>
         get() = _eventEdgeAlreadyExistError
@@ -38,10 +40,6 @@ class AlgorithmViewModel : ViewModel() {
     fun onEdgeAlreadyExistErrorFinish() {
         _eventEdgeAlreadyExistError.value = false
     }
-
-    private val _viewToIncreaseOnClickArea = MutableLiveData<View>()
-    val viewToIncreaseOnClickArea: LiveData<View>
-        get() = _viewToIncreaseOnClickArea
 
     private val _eventBackNavigate = MutableLiveData<Boolean>()
     val eventBackNavigate: LiveData<Boolean>
@@ -59,11 +57,11 @@ class AlgorithmViewModel : ViewModel() {
     val eventAlgorithmInfoShow: LiveData<Boolean>
         get() = _eventAlgorithmInfoShow
 
-    fun onAlgoInfoShow() {
+    fun onAlgorithmInfoShow() {
         _eventAlgorithmInfoShow.value = true
     }
 
-    fun onAlgoInfoShowFinish() {
+    fun onAlgorithmInfoShowFinish() {
         _eventAlgorithmInfoShow.value = false
     }
 
@@ -71,22 +69,35 @@ class AlgorithmViewModel : ViewModel() {
     val eventAlgorithmStepShow: LiveData<Boolean>
         get() = _eventAlgorithmStepShow
 
-    fun onAlgoStepShow() {
+    fun onAlgorithmStepShow() {
         _eventAlgorithmStepShow.value = true
     }
 
-    fun onAlgoStepShowFinish() {
+    fun onAlgorithmStepShowFinish() {
         _eventAlgorithmStepShow.value = false
     }
 
+    private val _eventVertexAlreadyExist = MutableLiveData<Boolean>()
+    val eventVertexAlreadyExist: LiveData<Boolean>
+        get() = _eventVertexAlreadyExist
+
+
+    fun onVertexAlreadyExistEvent() {
+        _eventVertexAlreadyExist.value = true
+    }
+
+    fun onVertexAlreadyExistEventFinish() {
+        _eventVertexAlreadyExist.value = false
+    }
+
+    //endregion
+
+    private lateinit var graph: Graph
 
     private val _pressedVertices = MutableLiveData<Pair<View?, View?>>()
     val pressedVertices: LiveData<Pair<View?, View?>>
         get() = _pressedVertices
 
-    private val _eventVertexAlreadyExist = MutableLiveData<Boolean>()
-    val eventVertexAlreadyExist: LiveData<Boolean>
-        get() = _eventVertexAlreadyExist
 
     private var vertexDiameter = 0
     private var edgeLineHeight = 0
@@ -108,15 +119,6 @@ class AlgorithmViewModel : ViewModel() {
         edgeWeightTextSize =
             context.resources.getDimension(R.dimen.text_size_fragment_algorithm_edge_weight).toInt()
     }
-
-    fun onVertexAlreadyExistEvent() {
-        _eventVertexAlreadyExist.value = true
-    }
-
-    fun onVertexAlreadyExistEventFinish() {
-        _eventVertexAlreadyExist.value = false
-    }
-
 
     //region vertex creating
     fun setupVertex(
@@ -269,7 +271,12 @@ class AlgorithmViewModel : ViewModel() {
         adjacencyList[firstVertexName]?.neighbours?.add(vertexNeighbour)
     }
 
-    private fun initWeight(edgeWeightView: TextView, edgeView: View, rotation: Float, edgeLength: Int) {
+    private fun initWeight(
+        edgeWeightView: TextView,
+        edgeView: View,
+        rotation: Float,
+        edgeLength: Int
+    ) {
         val offset = calculateOffsetBasedOnAngle(edgeLength / 2, rotation.toDouble(), false)
 
         setViewLayoutParams(
@@ -479,4 +486,82 @@ class AlgorithmViewModel : ViewModel() {
         view.layoutParams = params
     }
 
+    fun getNeighbourAlreadyExist(
+        firstVertexName: String,
+        secondVertexName: String
+    ): VertexNeighbour? {
+        adjacencyList[firstVertexName]?.let {
+            it.neighbours.forEach { neighbour ->
+                if (neighbour.name == secondVertexName) {
+                    return neighbour
+                }
+            }
+        }
+        return null
+    }
+
+
+    //region delete graph components
+    fun deleteChosenEdge(): List<View>? {
+        pressedVertices.value?.let {
+            if (it.second != null && it.first != null) {
+                val firstButton = it.first as AppCompatButton
+                val secondButton = it.second as AppCompatButton
+                val neighbour = getNeighbourAlreadyExist(
+                    secondButton.text.toString(),
+                    firstButton.text.toString()
+                )
+                if (neighbour != null) {
+                    adjacencyList[secondButton.text.toString()]?.neighbours?.remove(neighbour)
+                    println(adjacencyList)
+                    return listOf(
+                        neighbour.edgeView,
+                        neighbour.firstArrowPetalView,
+                        neighbour.secondArrowPetalView,
+                        neighbour.weightView
+                    )
+                }
+            }
+        }
+        return null
+    }
+
+    fun deleteChosenVertex(): MutableList<View>? {
+
+        pressedVertices.value?.let {
+            if (it.first != null) {
+                val vertexView = it.first as AppCompatButton
+                val viewsList = mutableListOf<View>()
+                adjacencyList[vertexView.text.toString()]?.neighbours?.forEach { neighbour ->
+                    viewsList.add(neighbour.edgeView)
+                    viewsList.add(neighbour.firstArrowPetalView)
+                    viewsList.add(neighbour.secondArrowPetalView)
+                    viewsList.add(neighbour.weightView)
+                }
+                viewsList.add(vertexView)
+                adjacencyList.remove(vertexView.text.toString())
+                println(adjacencyList)
+                return viewsList
+            }
+
+        }
+        return null
+    }
+    //endregion
+
+    fun initAlgorithm() {
+        val algorithmAdjacencyList = mutableMapOf<String, Neighbours>()
+        adjacencyList.forEach {
+            it.value.neighbours.forEach { vertexNeighbour ->
+                algorithmAdjacencyList[it.key] = mutableListOf(
+                    Pair(
+                        vertexNeighbour.name,
+                        vertexNeighbour.weightView.text.toString().toInt()
+                    )
+                )
+            }
+
+        }
+        graph = Graph(algorithmAdjacencyList)
+    }
 }

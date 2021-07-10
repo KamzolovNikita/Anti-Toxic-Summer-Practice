@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top_15dp"
             android:contentDescription="@string/content_description_algo_step_button"
-            android:onClick="@{() -> algorithmViewModel.onAlgoStepShow()}"
+            android:onClick="@{() -> algorithmViewModel.onAlgorithmStepShow()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
@@ -50,12 +50,35 @@
             style="@style/AlgorithmInfoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top_15dp"
+            android:layout_marginTop="@dimen/margin_15dp"
             android:contentDescription="@string/content_description_algo_info_button"
-            android:onClick="@{() -> algorithmViewModel.onAlgoInfoShow()}"
+            android:onClick="@{() -> algorithmViewModel.onAlgorithmInfoShow()}"
             app:layout_constraintLeft_toLeftOf="@+id/btn_algo_step"
             app:layout_constraintRight_toRightOf="@id/btn_algo_step"
             app:layout_constraintTop_toBottomOf="@+id/btn_algo_step" />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_delete_edge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/btn_delete_edge"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_delete_vertex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/btn_delete_vertex"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
