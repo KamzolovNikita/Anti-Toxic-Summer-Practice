@@ -5,7 +5,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background_grey">
 
         <ImageButton
             android:id="@+id/popup_algorithm_step_img_btn_close"

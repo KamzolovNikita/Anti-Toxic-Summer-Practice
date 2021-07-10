@@ -122,6 +122,8 @@ class AlgorithmViewModel : ViewModel() {
     val algorithmSteps: LiveData<List<Step>>
         get() = _algorithmSteps
 
+    private var highlightedPath = listOf<String>()
+
     var isEditing = true
 
     fun initDimensions(context: Context) {
@@ -584,10 +586,35 @@ class AlgorithmViewModel : ViewModel() {
         }
         graph = Graph(algorithmAdjacencyList)
     }
-    
+
+    fun nextAlgorithmStep() {
+        if(!bellmanFordAlgorithm.hasNext()) return
+        val steps = bellmanFordAlgorithm.getSteps()
+        _algorithmSteps.value = steps
+        if(steps.last().stepMsg == StepMsg.PATH) {
+            changePathColor(
+                highlightedPath,
+                defaultVertexDrawable,
+                defaultEdgeDrawable
+            )
+            highlightedPath = bellmanFordAlgorithm.getPath(
+                steps.last().stepData.secondVertexParam
+            )
+            changePathColor(
+                highlightedPath,
+                highlightedVertexDrawable,
+                highlightedEdgeDrawable
+            )
+        }
+    }
+
+    fun previousAlgorithmStep() {
+        bellmanFordAlgorithm.stepBack()
+        nextAlgorithmStep()
+    }
 
     private fun changePathColor(path: List<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
-        for(i in path.indices - 1) {
+        for(i in 0..path.size - 2) {
             adjacencyList[path[i]]?.vertexView?.setBackgroundResource(vertexDrawable)
             val edge = getNeighbour(path[i], path[i+1])
             edge?.firstArrowPetalView?.setBackgroundResource(edgeDrawable)

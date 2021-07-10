@@ -43,9 +43,11 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         viewModel = ViewModelProvider(this).get(AlgorithmViewModel::class.java)
 
         adapter = AlgorithmStepAdapter()
-        viewModel.algorithmSteps.value?.let {
+
+        viewModel.algorithmSteps.observe(viewLifecycleOwner, {
             adapter.data = it
-        }
+        })
+
         binding.algorithmViewModel = viewModel
 
         viewModel.eventBackNavigate.observe(viewLifecycleOwner, { event ->
@@ -257,6 +259,14 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
+        }
+
+        binding.popupAlgorithmStepImgBtnPrevious.setOnClickListener {
+            viewModel.previousAlgorithmStep()
+        }
+
+        binding.popupAlgorithmStepImgBtnNext.setOnClickListener {
+            viewModel.nextAlgorithmStep()
         }
 
         popupWindow.animationStyle = R.style.PopUpAnimationFromLeft

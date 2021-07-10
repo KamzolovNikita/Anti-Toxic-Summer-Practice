@@ -1,9 +1,12 @@
 package com.example.android.bellmanford.algorithm
 
-data class StepData(val firstVertexParam: String,
-                    val secondVertexParam: String,
-                    val firstWeightParam: Int,
-                    val secondWeightParam: Int)
+
+data class StepData(
+    val firstVertexParam: String,
+    val secondVertexParam: String,
+    val firstWeightParam: Int,
+    val secondWeightParam: Int?
+)
 
 enum class StepMsg{
     NORMAL,
@@ -27,11 +30,14 @@ class Step {
 // A class to represent a connected, directed and weighted graph
 class BellmanFord(private val graph: Graph) {
 
-    val stepList = mutableListOf<Step>()
+    private val stepList = mutableListOf<Step>()
     var sourceVertex = ""
     val dist = mutableMapOf<String, Int>()
     private  val previousVertexForVertex = mutableMapOf<String, String>()
     var containsNegativeCycle = false
+
+    private var stepsLeft = graph.adjacencyMap.size
+    private var currentStep = 0
 
     fun runAlgorithm(src: String) {
         dist.clear()
@@ -48,13 +54,18 @@ class BellmanFord(private val graph: Graph) {
         repeat(graph.vertexAmount - 1) {
             graph.adjacencyMap.forEach {
                 it.value.forEach { neighbour ->
-                    if(dist[it.key] != Int.MAX_VALUE &&
-                        dist[it.key]!! + neighbour.second < dist[neighbour.first]!!) {
-                            var newStep = Step(StepMsg.NORMAL,
+
+                    val distanceToFirstNode = if (dist[it.key] != null) dist[it.key]!! else 0
+                    val distanceForSecondNode = if (dist[neighbour.first] != null) dist[neighbour.first]!! else 0
+
+                    if(distanceToFirstNode != Int.MAX_VALUE &&
+                        distanceToFirstNode + neighbour.second < distanceForSecondNode) {
+                            val newStep = Step(StepMsg.NORMAL,
                                 StepData(it.key, neighbour.first,
-                                dist[neighbour.first]!!,
-                                dist[it.key]!! + neighbour.second))
+                                    distanceForSecondNode,
+                                    distanceToFirstNode + neighbour.second))
                             stepList.add(newStep)
+                            ++stepsLeft
                             dist[neighbour.first] = dist[it.key]!! + neighbour.second
                             previousVertexForVertex[neighbour.first] = it.key
                     }
@@ -65,10 +76,15 @@ class BellmanFord(private val graph: Graph) {
         //Step 3: Check for negative cycle
         graph.adjacencyMap.forEach {
             it.value.forEach { neighbour ->
-                if(dist[it.key] != Int.MAX_VALUE &&
-                    dist[it.key]!! + neighbour.second < dist[neighbour.first]!!) {
-                    var newStep = Step(StepMsg.NEGATIVE_CYCLE)
+
+                val distanceToFirstNode = if (dist[it.key] != null) dist[it.key]!! else 0
+                val distanceForSecondNode = if (dist[neighbour.first] != null) dist[neighbour.first]!! else 0
+
+                if(distanceToFirstNode != Int.MAX_VALUE &&
+                    distanceToFirstNode + neighbour.second < distanceForSecondNode) {
+                    val newStep = Step(StepMsg.NEGATIVE_CYCLE)
                     stepList.add(newStep)
+                    ++stepsLeft
                     println("Graph contains negative weight cycle")
                     containsNegativeCycle = true
                     return
@@ -76,25 +92,37 @@ class BellmanFord(private val graph: Graph) {
             }
         }
 
-        dist.forEach {
-            println("${it.key} ${it.value}")
-        }
-
-        previousVertexForVertex.forEach {
-            println("${it.key} ${it.value}")
-        }
-
-        val paths = getPaths()
-        paths.forEach { it ->
-            println("${it.key}:" +
-                    " ${
-                        it.value.toString()
-                    }")
+        graph.adjacencyMap.forEach {
+            val newStep = Step(StepMsg.PATH,
+                StepData(sourceVertex,
+                it.key,
+                dist[it.key] ?: 0,
+                null)
+            )
+            stepList.add(newStep)
         }
 
     }
 
-    fun getPaths(): MutableMap<String, List<String>> {
+    fun getSteps(): List<Step> {
+        stepsLeft--
+        return stepList.slice(IntRange(0, currentStep++))
+    }
+
+    fun stepBack() {
+        stepsLeft++
+        currentStep--
+    }
+
+    fun getPath(vertexName: String): List<String> {
+        return getSinglePath(vertexName)
+    }
+
+    fun hasNext(): Boolean {
+        return stepsLeft > 0
+    }
+
+    private fun getPaths(): MutableMap<String, List<String>> {
         val paths = mutableMapOf<String, List<String>>()
         graph.adjacencyMap.forEach {
             paths[it.key] = getSinglePath(it.key)
