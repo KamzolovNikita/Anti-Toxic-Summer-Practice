@@ -27,17 +27,21 @@ class Step {
 class BellmanFord(private val graph: Graph) {
 
     val stepList = mutableListOf<Step>()
+    var sourceVertex = ""
+    val dist = mutableMapOf<String, Int>()
+    private  val previousVertexForVertex = mutableMapOf<String, String>()
+    var containsNegativeCycle = false
 
-    fun runAlgo(src: String) {
-        val dist = mutableMapOf<String, Int>()
+    fun runAlgorithm(src: String) {
+        dist.clear()
+        sourceVertex = src
 
         // Step 1: Initialize distances from src to all other vertexes
         graph.adjacencyMap.forEach {
             dist[it.key] = Int.MAX_VALUE
         }
         dist[src] = 0
-
-
+        previousVertexForVertex[src] = src
 
         // Step 2: Relax all edges |V| - 1 times
         repeat(graph.vertexAmount - 1) {
@@ -51,6 +55,7 @@ class BellmanFord(private val graph: Graph) {
                                 dist[it.key]!! + neighbour.second))
                             stepList.add(newStep)
                             dist[neighbour.first] = dist[it.key]!! + neighbour.second
+                            previousVertexForVertex[neighbour.first] = it.key
                     }
                 }
             }
@@ -64,6 +69,7 @@ class BellmanFord(private val graph: Graph) {
                     var newStep = Step(StepMsg.NEGATIVE_CYCLE)
                     stepList.add(newStep)
                     println("Graph contains negative weight cycle")
+                    containsNegativeCycle = true
                     return
                 }
             }
@@ -72,5 +78,45 @@ class BellmanFord(private val graph: Graph) {
         dist.forEach {
             println("${it.key} ${it.value}")
         }
+
+        previousVertexForVertex.forEach {
+            println("${it.key} ${it.value}")
+        }
+
+        val paths = getPaths()
+        paths.forEach { it ->
+            println("${it.key}:" +
+                    " ${
+                        it.value.toString()
+                    }")
+        }
+
+    }
+
+    fun getPaths(): MutableMap<String, List<String>> {
+        val paths = mutableMapOf<String, List<String>>()
+        graph.adjacencyMap.forEach {
+            paths[it.key] = getSinglePath(it.key)
+        }
+
+        return paths
+    }
+
+    private fun getSinglePath(vertexTo: String): List<String> {
+
+        if(vertexTo == sourceVertex) return mutableListOf<String>()
+
+        val path = mutableListOf<String>()
+
+        var currentVertex = previousVertexForVertex[vertexTo]
+        while(currentVertex != sourceVertex && currentVertex != vertexTo && currentVertex != null && !containsNegativeCycle) {
+            path.add(currentVertex.toString())
+            currentVertex = previousVertexForVertex[currentVertex]
+        }
+
+        if(currentVertex != null)
+            path.add(currentVertex.toString())
+
+        return path.reversed()
     }
 }
