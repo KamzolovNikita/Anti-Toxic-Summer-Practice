@@ -618,14 +618,30 @@ class AlgorithmViewModel : ViewModel() {
         if(!bellmanFordAlgorithm.hasNext()) return
         val steps = bellmanFordAlgorithm.getSteps()
         _algorithmSteps.value = steps
-        if(steps.last().stepMsg == StepMsg.PATH) {
+        checkLastStep(steps.last())
+    }
+
+    fun previousAlgorithmStep() {
+        bellmanFordAlgorithm.stepBack()
+        bellmanFordAlgorithm.stepBack()
+        nextAlgorithmStep()
+    }
+
+    fun toEndAlgorithmStep() {
+        val steps = bellmanFordAlgorithm.getAllSteps()
+        _algorithmSteps.value = steps
+        checkLastStep(steps.last())
+    }
+
+    private fun checkLastStep(lastStep: Step) {
+        if(lastStep.stepMsg == StepMsg.PATH) {
             changePathColor(
                 highlightedPath,
                 defaultVertexDrawable,
                 defaultEdgeDrawable
             )
             highlightedPath = bellmanFordAlgorithm.getPath(
-                steps.last().stepData.secondVertexParam
+                lastStep.stepData.secondVertexParam
             )
             changePathColor(
                 highlightedPath,
@@ -633,15 +649,6 @@ class AlgorithmViewModel : ViewModel() {
                 highlightedEdgeDrawable
             )
         }
-    }
-
-    fun previousAlgorithmStep() {
-        bellmanFordAlgorithm.stepBack()
-        nextAlgorithmStep()
-    }
-
-    fun toEndAlgorithmStep() {
-        //_algorithmSteps.value = TODO()
     }
 
     private fun changePathColor(path: List<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
@@ -652,6 +659,7 @@ class AlgorithmViewModel : ViewModel() {
             edge?.secondArrowPetalView?.setBackgroundResource(edgeDrawable)
             edge?.edgeView?.setBackgroundResource(edgeDrawable)
         }
-        adjacencyList[path.last()]?.vertexView?.setBackgroundResource(vertexDrawable)
+        if(path.isNotEmpty())
+            adjacencyList[path.last()]?.vertexView?.setBackgroundResource(vertexDrawable)
     }
 }

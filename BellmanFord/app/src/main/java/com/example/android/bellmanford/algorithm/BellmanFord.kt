@@ -15,14 +15,17 @@ enum class StepMsg{
 }
 
 class Step {
-    constructor(stepMsg: StepMsg) {
+    constructor(stepNumber: Int, stepMsg: StepMsg) {
+        this.stepNumber = stepNumber
         this.stepMsg = stepMsg
     }
-    constructor(stepMsg: StepMsg, stepData: StepData) {
+    constructor(stepNumber: Int, stepMsg: StepMsg, stepData: StepData) {
+        this.stepNumber = stepNumber
         this.stepMsg = stepMsg
         this.stepData = stepData
     }
 
+    var stepNumber = -1
     lateinit var stepMsg: StepMsg
     lateinit var stepData: StepData
 }
@@ -41,6 +44,8 @@ class BellmanFord(private val graph: Graph) {
 
     fun runAlgorithm(src: String) {
         dist.clear()
+        currentStep = 0
+        stepsLeft = 0
         sourceVertex = src
 
         // Step 1: Initialize distances from src to all other vertexes
@@ -60,12 +65,14 @@ class BellmanFord(private val graph: Graph) {
 
                     if(distanceToFirstNode != Int.MAX_VALUE &&
                         distanceToFirstNode + neighbour.second < distanceForSecondNode) {
-                            val newStep = Step(StepMsg.NORMAL,
+                            val newStep = Step(
+                                currentStep + 1,
+                                StepMsg.NORMAL,
                                 StepData(it.key, neighbour.first,
                                     distanceForSecondNode,
                                     distanceToFirstNode + neighbour.second))
                             stepList.add(newStep)
-                            ++stepsLeft
+                            currentStep++
                             dist[neighbour.first] = dist[it.key]!! + neighbour.second
                             previousVertexForVertex[neighbour.first] = it.key
                     }
@@ -82,9 +89,12 @@ class BellmanFord(private val graph: Graph) {
 
                 if(distanceToFirstNode != Int.MAX_VALUE &&
                     distanceToFirstNode + neighbour.second < distanceForSecondNode) {
-                    val newStep = Step(StepMsg.NEGATIVE_CYCLE)
+                    val newStep = Step(
+                        currentStep + 1,
+                        StepMsg.NEGATIVE_CYCLE
+                    )
                     stepList.add(newStep)
-                    ++stepsLeft
+                    currentStep++
                     println("Graph contains negative weight cycle")
                     containsNegativeCycle = true
                     return
@@ -93,25 +103,42 @@ class BellmanFord(private val graph: Graph) {
         }
 
         graph.adjacencyMap.forEach {
-            val newStep = Step(StepMsg.PATH,
+            val newStep = Step(
+                currentStep + 1,
+                StepMsg.PATH,
                 StepData(sourceVertex,
                 it.key,
                 dist[it.key] ?: 0,
                 null)
             )
+            currentStep++
             stepList.add(newStep)
         }
 
+        currentStep = 0
+        stepsLeft = stepList.size
     }
 
     fun getSteps(): List<Step> {
+        println("Trying to step : curStep ${currentStep}, stepsLeft ${stepsLeft}")
+        println("After doing step: curStep ${currentStep + 1}, stepsLeft ${stepsLeft - 1}")
         stepsLeft--
         return stepList.slice(IntRange(0, currentStep++))
     }
 
+    fun getAllSteps(): List<Step> {
+        currentStep = stepList.size
+        stepsLeft = 0
+        return stepList
+    }
+
     fun stepBack() {
-        stepsLeft++
-        currentStep--
+        println("Trying to step back: curStep ${currentStep}, stepsLeft ${stepsLeft}")
+        if(currentStep > 0) {
+            stepsLeft++
+            currentStep--
+        }
+        println("After step back: curStep ${currentStep}, stepsLeft ${stepsLeft}")
     }
 
     fun getPath(vertexName: String): List<String> {
@@ -136,6 +163,7 @@ class BellmanFord(private val graph: Graph) {
         if(vertexTo == sourceVertex) return mutableListOf<String>()
 
         val path = mutableListOf<String>()
+        path.add(vertexTo)
 
         var currentVertex = previousVertexForVertex[vertexTo]
         while(currentVertex != sourceVertex && currentVertex != vertexTo && currentVertex != null && !containsNegativeCycle) {

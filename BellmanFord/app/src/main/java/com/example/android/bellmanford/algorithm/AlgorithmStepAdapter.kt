@@ -30,27 +30,44 @@ class AlgorithmStepAdapter : RecyclerView.Adapter<AlgorithmStepAdapter.TextItemV
         fun bind(item: Step) {
             when (item.stepMsg) {
                 StepMsg.NORMAL -> {
+                    val firstWeightParams = if(item.stepData.firstWeightParam != Int.MAX_VALUE) item.stepData.firstWeightParam.toString() else "∞"
                     textView.text = textView.context.resources.getString(
                         R.string.txt_algorithm_step_default,
+                        item.stepNumber,
                         item.stepData.firstVertexParam,
                         item.stepData.secondVertexParam,
-                        item.stepData.firstWeightParam,
+                        firstWeightParams,
                         item.stepData.firstVertexParam,
                         item.stepData.secondVertexParam,
                         item.stepData.secondWeightParam
                     )
                 }
+
                 StepMsg.NEGATIVE_CYCLE -> {
                     textView.text =
-                        textView.context.resources.getString(R.string.txt_algorithm_step_negative_cycle)
+                        textView.context.resources.getString(
+                            R.string.txt_algorithm_step_negative_cycle,
+                            item.stepNumber)
                 }
+
                 StepMsg.PATH -> {
-                    textView.text = textView.context.resources.getString(
-                        R.string.txt_algorithm_path,
-                        item.stepData.firstVertexParam,
-                        item.stepData.secondVertexParam,
-                        item.stepData.firstWeightParam
-                    )
+                    if(item.stepData.firstWeightParam != Int.MAX_VALUE) {
+                        textView.text = textView.context.resources.getString(
+                            R.string.txt_algorithm_path,
+                            item.stepNumber,
+                            item.stepData.firstVertexParam,
+                            item.stepData.secondVertexParam,
+                            item.stepData.firstWeightParam
+                        )
+                    }
+                    else {
+                        textView.text = textView.context.resources.getString(
+                            R.string.txt_algorithm_no_path,
+                            item.stepNumber,
+                            item.stepData.firstVertexParam,
+                            item.stepData.secondVertexParam
+                        )
+                    }
                 }
             }
         }
