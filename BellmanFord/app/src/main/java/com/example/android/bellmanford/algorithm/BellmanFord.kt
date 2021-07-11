@@ -41,9 +41,11 @@ class BellmanFord(private val graph: Graph) {
 
     private var stepsLeft = graph.adjacencyMap.size
     private var currentStep = 0
+    private val negativeCycleList = mutableListOf<String>()
 
     fun runAlgorithm(src: String) {
         dist.clear()
+        negativeCycleList.clear()
         currentStep = 0
         stepsLeft = 0
         sourceVertex = src
@@ -93,10 +95,25 @@ class BellmanFord(private val graph: Graph) {
                         currentStep + 1,
                         StepMsg.NEGATIVE_CYCLE
                     )
+
+                    var currentVertex : String? = it.key
+
+                    repeat(graph.vertexAmount - 1) {
+                        currentVertex = previousVertexForVertex[currentVertex]
+                    }
+
+                    var cycleVertex = currentVertex
+
+                    while(cycleVertex != previousVertexForVertex[currentVertex]) {
+                        previousVertexForVertex[currentVertex]?.let{ it -> negativeCycleList.add(it)}
+                        currentVertex = previousVertexForVertex[currentVertex]!!
+                    }
+                    cycleVertex?.let { it1 -> negativeCycleList.add(it1) }
+
+
                     stepList.add(newStep)
                     currentStep = 0
                     stepsLeft = stepList.size
-                    println("Graph contains negative weight cycle, stespLeft ${stepsLeft}")
                     containsNegativeCycle = true
                     return
                 }
@@ -151,6 +168,10 @@ class BellmanFord(private val graph: Graph) {
         return stepsLeft > 0
     }
 
+    fun getNegativeCycle(): List<String> {
+        return negativeCycleList.reversed()
+    }
+
     private fun getPaths(): MutableMap<String, List<String>> {
         val paths = mutableMapOf<String, List<String>>()
         graph.adjacencyMap.forEach {
@@ -161,9 +182,6 @@ class BellmanFord(private val graph: Graph) {
     }
 
     private fun getSinglePath(vertexTo: String): List<String> {
-
-        if(vertexTo == sourceVertex) return mutableListOf<String>()
-
         val path = mutableListOf<String>()
         path.add(vertexTo)
 

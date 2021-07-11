@@ -634,15 +634,29 @@ class AlgorithmViewModel : ViewModel() {
     }
 
     private fun checkLastStep(lastStep: Step) {
+        changePathColor(
+            highlightedPath,
+            defaultVertexDrawable,
+            defaultEdgeDrawable
+        )
         if(lastStep.stepMsg == StepMsg.PATH) {
+            highlightedPath = bellmanFordAlgorithm.getPath(
+                lastStep.stepData.secondVertexParam
+            )
+            changePathColor(
+                highlightedPath,
+                highlightedVertexDrawable,
+                highlightedEdgeDrawable
+            )
+        }
+
+        if(lastStep.stepMsg == StepMsg.NEGATIVE_CYCLE) {
             changePathColor(
                 highlightedPath,
                 defaultVertexDrawable,
                 defaultEdgeDrawable
             )
-            highlightedPath = bellmanFordAlgorithm.getPath(
-                lastStep.stepData.secondVertexParam
-            )
+            highlightedPath = bellmanFordAlgorithm.getNegativeCycle()
             changePathColor(
                 highlightedPath,
                 highlightedVertexDrawable,
