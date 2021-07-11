@@ -211,6 +211,7 @@ class AlgorithmViewModel : ViewModel() {
                 startVertexName = vertexView.text.toString()
                 vertexView.setBackgroundResource(highlightedVertexDrawable)
                 onAlgorithmReady()
+                nextAlgorithmStep()
             }
         }
     }
@@ -224,10 +225,10 @@ class AlgorithmViewModel : ViewModel() {
     //endregion
 
     fun editingMode() {
+        adjacencyList[startVertexName]?.vertexView?.setBackgroundResource(defaultVertexDrawable)
         startVertexName = ""
         changePathColor(highlightedPath, defaultVertexDrawable, defaultEdgeDrawable)
         _algorithmSteps.value = listOf()
-        clearPressedVertices()
         onAlgorithmFinish()
     }
 
