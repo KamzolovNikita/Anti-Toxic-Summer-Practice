@@ -51,6 +51,12 @@ class StartFragment : Fragment() {
             }
         })
 
+        viewModel.eventCloseApp.observe(viewLifecycleOwner, { event->
+            if(event) {
+                requireActivity().finish()
+            }
+        })
+
         return binding.root
     }
 

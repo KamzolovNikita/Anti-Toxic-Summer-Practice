@@ -98,7 +98,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         }
 
         binding.fragmentAlgorithmFltCanvas.setOnClickListener {
-            if(viewModel.isEditing) {
+            if (viewModel.isEditing) {
                 val vertexNameDialogFragment = VertexNameDialogFragment(this)
                 activity?.let {
                     vertexNameDialogFragment.show(it.supportFragmentManager, "New vertex")
@@ -113,6 +113,11 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
                 vertexInitErrorToast(getString(R.string.toast_explanation_already_exist))
                 viewModel.onVertexAlreadyExistEventFinish()
             }
+        })
+
+        viewModel.eventAlgorithmReady.observe(viewLifecycleOwner, {
+            if (it) binding.btnAlgoStep.visibility = View.VISIBLE
+            else binding.btnAlgoStep.visibility = View.INVISIBLE
         })
 
 
@@ -187,7 +192,16 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         val firstArrowPetal = View(requireContext())
         val secondArrowPetal = View(requireContext())
         val edgeWeight = TextView(requireContext())
-        edgeWeight.text = weight
+        if (weight.toIntOrNull() == null) {
+            viewModel.clearPressedVertices()
+            Toast.makeText(
+                requireContext(),
+                "Ребро не было создано, вес ребра не введен",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        else edgeWeight.text = weight.toInt().toString()
         viewModel.setupEdge(
             newLine,
             firstArrowPetal,
@@ -244,7 +258,8 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
     }
 
     private fun showAlgorithmStepPopUp(view: View) {
-        val binding = DataBindingUtil.inflate<AlgostepPopupBinding>(layoutInflater,
+        val binding = DataBindingUtil.inflate<AlgostepPopupBinding>(
+            layoutInflater,
             R.layout.algostep_popup, null, false
         )
         binding.popupAlgorithmStepRvStepExplanation.adapter = adapter
@@ -271,6 +286,11 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         binding.popupAlgorithmStepImgBtnNext.setOnClickListener {
             viewModel.nextAlgorithmStep()
         }
+
+        binding.popupAlgorithmStepImgBtnToEnd.setOnClickListener {
+            viewModel.toEndAlgorithmStep()
+        }
+
 
         popupWindow.animationStyle = R.style.PopUpAnimationFromLeft
         popupWindow.showAtLocation(view, Gravity.START, 0, 0)

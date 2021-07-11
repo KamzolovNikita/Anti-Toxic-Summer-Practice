@@ -42,8 +42,10 @@
             android:layout_marginTop="@dimen/margin_top_15dp"
             android:contentDescription="@string/content_description_algo_step_button"
             android:onClick="@{() -> algorithmViewModel.onAlgorithmStepShow()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_algo_info"
+            app:layout_constraintRight_toRightOf="@id/btn_algo_info"
+            app:layout_constraintTop_toBottomOf="@+id/btn_algo_info"/>
 
         <ImageButton
             android:id="@+id/btn_algo_info"
@@ -51,11 +53,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_back"
             android:contentDescription="@string/content_description_algo_info_button"
             android:onClick="@{() -> algorithmViewModel.onAlgorithmInfoShow()}"
-            app:layout_constraintLeft_toLeftOf="@+id/btn_algo_step"
-            app:layout_constraintRight_toRightOf="@id/btn_algo_step"
-            app:layout_constraintTop_toBottomOf="@+id/btn_algo_step" />
+             />
 
         <ImageButton
             android:id="@+id/fragment_algorithm_img_btn_delete_edge"

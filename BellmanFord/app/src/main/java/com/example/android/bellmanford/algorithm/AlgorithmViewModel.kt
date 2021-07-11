@@ -91,6 +91,18 @@ class AlgorithmViewModel : ViewModel() {
         _eventVertexAlreadyExist.value = false
     }
 
+    private val _eventAlgorithmReady = MutableLiveData<Boolean>()
+    val eventAlgorithmReady: LiveData<Boolean>
+        get() = _eventAlgorithmReady
+
+    fun onAlgorithmReady() {
+        _eventAlgorithmReady.value = true
+    }
+
+    fun onAlgorithmFinish() {
+        _eventAlgorithmReady.value = false
+    }
+
     //endregion
 
     private lateinit var graph: Graph
@@ -198,6 +210,7 @@ class AlgorithmViewModel : ViewModel() {
                 bellmanFordAlgorithm.runAlgorithm(vertexView.text.toString())
                 startVertexName = vertexView.text.toString()
                 vertexView.setBackgroundResource(highlightedVertexDrawable)
+                onAlgorithmReady()
             }
         }
     }
@@ -215,6 +228,7 @@ class AlgorithmViewModel : ViewModel() {
         changePathColor(highlightedPath, defaultVertexDrawable, defaultEdgeDrawable)
         _algorithmSteps.value = listOf()
         clearPressedVertices()
+        onAlgorithmFinish()
     }
 
     fun algorithmMode() {
@@ -625,6 +639,10 @@ class AlgorithmViewModel : ViewModel() {
         nextAlgorithmStep()
     }
 
+    fun toEndAlgorithmStep() {
+        //_algorithmSteps.value = TODO()
+    }
+
     private fun changePathColor(path: List<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
         for(i in 0..path.size - 2) {
             adjacencyList[path[i]]?.vertexView?.setBackgroundResource(vertexDrawable)
@@ -633,5 +651,6 @@ class AlgorithmViewModel : ViewModel() {
             edge?.secondArrowPetalView?.setBackgroundResource(edgeDrawable)
             edge?.edgeView?.setBackgroundResource(edgeDrawable)
         }
+        adjacencyList[path.last()]?.vertexView?.setBackgroundResource(vertexDrawable)
     }
 }

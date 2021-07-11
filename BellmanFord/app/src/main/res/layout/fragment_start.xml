@@ -71,6 +71,17 @@
             app:layout_constraintStart_toEndOf="@+id/fragment_start_llt_buttons_container"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_top_15dp"
+            android:layout_marginStart="@dimen/margin_15dp"
+            android:contentDescription="@string/content_description_back_button"
+            android:background="@drawable/btn_exit_app"
+            android:onClick="@{() -> startViewModel.onCloseApp()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
