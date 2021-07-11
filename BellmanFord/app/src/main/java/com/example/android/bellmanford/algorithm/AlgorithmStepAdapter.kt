@@ -36,6 +36,7 @@ class AlgorithmStepAdapter : RecyclerView.Adapter<AlgorithmStepAdapter.TextItemV
                         item.stepNumber,
                         item.stepData.firstVertexParam,
                         item.stepData.secondVertexParam,
+                        item.stepData.secondVertexParam,
                         firstWeightParams,
                         item.stepData.firstVertexParam,
                         item.stepData.secondVertexParam,

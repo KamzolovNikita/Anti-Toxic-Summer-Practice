@@ -94,8 +94,9 @@ class BellmanFord(private val graph: Graph) {
                         StepMsg.NEGATIVE_CYCLE
                     )
                     stepList.add(newStep)
-                    currentStep++
-                    println("Graph contains negative weight cycle")
+                    currentStep = 0
+                    stepsLeft = stepList.size
+                    println("Graph contains negative weight cycle, stespLeft ${stepsLeft}")
                     containsNegativeCycle = true
                     return
                 }
@@ -146,6 +147,7 @@ class BellmanFord(private val graph: Graph) {
     }
 
     fun hasNext(): Boolean {
+        println("In hasNext: stepsLeft=${stepsLeft}")
         return stepsLeft > 0
     }
 

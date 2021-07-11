@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:maxLength="3"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:hint="@string/hint_edge_weigt_input" />
     </FrameLayout>
 </layout>
