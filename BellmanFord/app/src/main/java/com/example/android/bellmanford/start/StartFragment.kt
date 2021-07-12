@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
+import com.example.android.bellmanford.anim.AppAnimation
 import com.example.android.bellmanford.databinding.FragmentStartBinding
 
 class StartFragment : Fragment() {
@@ -33,13 +34,15 @@ class StartFragment : Fragment() {
         viewModel.eventInfoNavigate.observe(viewLifecycleOwner, { event ->
             if (event) {
                 findNavController().navigate(R.id.action_startFragment_to_algorithmInfoFragment)
-                viewModel.onInfoNavigateFinish()
+                AppAnimation.fadingButtonAnimation(binding.fragmentStartBtnAlgorithmInfo)
+                viewModel.onInfoNavigateFinish ()
             }
         })
 
         viewModel.eventDevelopersNavigate.observe(viewLifecycleOwner, { event ->
             if (event) {
                 findNavController().navigate(R.id.action_startFragment_to_developersFragment)
+                AppAnimation.fadingButtonAnimation(binding.fragmentStartBtnDevelopers)
                 viewModel.onDevelopersNavigateFinish()
             }
         })
@@ -47,12 +50,14 @@ class StartFragment : Fragment() {
         viewModel.eventAlgorithmNavigate.observe(viewLifecycleOwner, { event ->
             if (event) {
                 findNavController().navigate(R.id.action_startFragment_to_algorithmFragment)
+                AppAnimation.fadingButtonAnimation(binding.fragmentStartBtnTryAlgorithm)
                 viewModel.onAlgorithmNavigateFinish()
             }
         })
 
         viewModel.eventCloseApp.observe(viewLifecycleOwner, { event->
             if(event) {
+                AppAnimation.fadingButtonAnimation(binding.fragmentStartImgBtnCloseApp)
                 requireActivity().finish()
             }
         })

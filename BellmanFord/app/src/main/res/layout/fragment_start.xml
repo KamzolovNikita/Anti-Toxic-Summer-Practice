@@ -72,7 +72,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btn_back"
+            android:id="@+id/fragment_start_img_btn_close_app"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_top_15dp"

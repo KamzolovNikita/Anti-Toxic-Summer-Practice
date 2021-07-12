@@ -10,12 +10,24 @@
         android:label="StartFragment" >
         <action
             android:id="@+id/action_startFragment_to_developersFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_in_right"
             app:destination="@id/developersFragment" />
         <action
             android:id="@+id/action_startFragment_to_algorithmInfoFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_in_right"
             app:destination="@id/algorithmInfoFragment" />
         <action
             android:id="@+id/action_startFragment_to_algorithmFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_in_right"
             app:destination="@id/algorithmFragment" />
     </fragment>
     <fragment

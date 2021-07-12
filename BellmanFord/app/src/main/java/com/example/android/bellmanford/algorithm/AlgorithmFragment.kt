@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
+import com.example.android.bellmanford.anim.AppAnimation
 import com.example.android.bellmanford.databinding.AlgostepPopupBinding
 import com.example.android.bellmanford.databinding.FragmentAlgorithmBinding
 import com.example.android.bellmanford.dialogs.EdgeWeightDialogFragment
@@ -54,6 +55,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             if (event) {
                 findNavController().popBackStack()
                 viewModel.onBackNavigateFinish()
+                AppAnimation.fadingButtonAnimation(binding.btnBack)
             }
         })
 
@@ -61,6 +63,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             if (event) {
                 showAlgorithmStepPopUp(binding.btnAlgoStep)
                 viewModel.onAlgorithmStepShowFinish()
+                AppAnimation.fadingButtonAnimation(binding.btnAlgoStep)
             }
         })
 
@@ -68,6 +71,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             if (event) {
                 showAlgorithmInfoPopUp(binding.btnAlgoInfo)
                 viewModel.onAlgorithmInfoShowFinish()
+                AppAnimation.fadingButtonAnimation(binding.btnAlgoInfo)
             }
         })
 
@@ -75,6 +79,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             viewModel.isEditing = true
             it.visibility = View.INVISIBLE
             binding.fragmentAlgorithmImgBtnAlgorithmMode.visibility = View.VISIBLE
+            AppAnimation.fadingButtonAnimation(it)
             viewModel.editingMode()
         }
 
@@ -82,6 +87,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
             viewModel.isEditing = false
             it.visibility = View.INVISIBLE
             binding.fragmentAlgorithmImgBtnEditingMode.visibility = View.VISIBLE
+            AppAnimation.fadingButtonAnimation(it)
             viewModel.algorithmMode()
             Toast.makeText(requireContext(), "Выберите начальную вершину", Toast.LENGTH_SHORT)
                 .show()
@@ -147,6 +153,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         })
 
         binding.fragmentAlgorithmImgBtnDeleteVertex.setOnClickListener {
+            AppAnimation.fadingButtonAnimation(it)
             val viewsToDelete = viewModel.deleteChosenVertex()
             viewsToDelete?.let {
                 it.forEach { view ->
@@ -157,6 +164,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         }
 
         binding.fragmentAlgorithmImgBtnDeleteEdge.setOnClickListener {
+            AppAnimation.fadingButtonAnimation(it)
             val viewsToDelete = viewModel.deleteChosenEdge()
             viewsToDelete?.let {
                 it.forEach { view ->
@@ -250,6 +258,7 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
         exitButton.setOnClickListener {
             if (popupWindow.isShowing) {
+                AppAnimation.fadingButtonAnimation(it)
                 popupWindow.dismiss()
             }
         }
@@ -279,19 +288,23 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
 
         binding.popupAlgorithmStepImgBtnClose.setOnClickListener {
             if (popupWindow.isShowing) {
+                AppAnimation.fadingButtonAnimation(it)
                 popupWindow.dismiss()
             }
         }
 
         binding.popupAlgorithmStepImgBtnPrevious.setOnClickListener {
+            AppAnimation.fadingButtonAnimation(it)
             viewModel.previousAlgorithmStep()
         }
 
         binding.popupAlgorithmStepImgBtnNext.setOnClickListener {
+            AppAnimation.fadingButtonAnimation(it)
             viewModel.nextAlgorithmStep()
         }
 
         binding.popupAlgorithmStepImgBtnToEnd.setOnClickListener {
+            AppAnimation.fadingButtonAnimation(it)
             viewModel.toEndAlgorithmStep()
         }
 

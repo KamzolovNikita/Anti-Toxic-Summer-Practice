@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.bellmanford.R
+import com.example.android.bellmanford.anim.AppAnimation
 import com.example.android.bellmanford.databinding.FragmentDevelopersBinding
 
 class DevelopersFragment : Fragment() {
@@ -30,6 +31,7 @@ class DevelopersFragment : Fragment() {
 
         viewModel.eventBackNavigate.observe(viewLifecycleOwner, { event ->
             if(event) {
+                AppAnimation.fadingButtonAnimation(binding.fragmentDevelopersImgBtnBack)
                 findNavController().popBackStack()
                 viewModel.onBackNavigateFinish()
             }
