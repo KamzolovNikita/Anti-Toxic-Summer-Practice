@@ -169,6 +169,7 @@ class BellmanFord(private val graph: Graph) {
     }
 
     fun getNegativeCycle(): List<String> {
+        negativeCycleList.add(negativeCycleList.first())
         return negativeCycleList.reversed()
     }
 
