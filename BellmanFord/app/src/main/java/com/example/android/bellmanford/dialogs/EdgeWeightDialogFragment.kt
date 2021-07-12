@@ -46,9 +46,11 @@ class EdgeWeightDialogFragment(val edgeWeightEntered: EdgeWeightEntered) : Dialo
     override fun onDetach() {
         super.onDetach()
         AppFullscreen.turnFullscreen(requireActivity())
+        edgeWeightEntered.dialogClosed()
     }
 }
 
 interface EdgeWeightEntered {
     fun receiveWeight(weight: String)
+    fun dialogClosed()
 }

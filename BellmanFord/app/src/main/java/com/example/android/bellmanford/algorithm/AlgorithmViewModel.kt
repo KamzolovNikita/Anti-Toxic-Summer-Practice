@@ -615,7 +615,14 @@ class AlgorithmViewModel : ViewModel() {
     }
 
     fun nextAlgorithmStep() {
-        if(!bellmanFordAlgorithm.hasNext()) return
+        if(!bellmanFordAlgorithm.hasNext()) {
+            changePathColor(
+                highlightedPath,
+                defaultVertexDrawable,
+                defaultEdgeDrawable
+            )
+            return
+        }
         val steps = bellmanFordAlgorithm.getSteps()
         _algorithmSteps.value = steps
         checkLastStep(steps.last())

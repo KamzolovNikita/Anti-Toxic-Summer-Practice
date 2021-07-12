@@ -223,6 +223,10 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         viewModel.clearPressedVertices()
     }
 
+    override fun dialogClosed() {
+        viewModel.clearPressedVertices()
+    }
+
     private fun vertexInitErrorToast(explanation: String) {
         Toast.makeText(
             context,
