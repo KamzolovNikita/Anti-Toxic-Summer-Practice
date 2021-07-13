@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="algorithmViewModel"
+            type="com.example.android.bellmanford.algorithm.AlgorithmViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <FrameLayout
+            android:id="@+id/fragment_algorithm_flt_canvas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".algorithm.AlgorithmFragment">
+
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            style="@style/BackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_15dp"
+            android:contentDescription="@string/content_description_back_button"
+            android:onClick="@{() -> algorithmViewModel.onBackNavigate()}"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_algo_step"
+            app:layout_constraintRight_toRightOf="@id/btn_algo_step"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_algo_step"
+            style="@style/AlgorithmStepButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_15dp"
+            android:contentDescription="@string/content_description_algo_step_button"
+            android:onClick="@{() -> algorithmViewModel.onAlgorithmStepShow()}"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_algo_info"
+            app:layout_constraintRight_toRightOf="@id/btn_algo_info"
+            app:layout_constraintTop_toBottomOf="@+id/btn_algo_info"/>
+
+        <ImageButton
+            android:id="@+id/btn_algo_info"
+            style="@style/AlgorithmInfoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_back"
+            android:contentDescription="@string/content_description_algo_info_button"
+            android:onClick="@{() -> algorithmViewModel.onAlgorithmInfoShow()}"
+             />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_delete_edge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:background="@drawable/btn_delete_edge"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_delete_vertex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:background="@drawable/btn_delete_vertex"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_editing_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:background="@drawable/btn_editing_mode"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"  />
+
+        <ImageButton
+            android:id="@+id/fragment_algorithm_img_btn_algorithm_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_15dp"
+            android:layout_marginBottom="@dimen/margin_15dp"
+            android:background="@drawable/btn_algorithm_mode"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
