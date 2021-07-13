@@ -41,5 +41,11 @@ class GraphUnitTest {
 
         assertEquals(adjacencyMap["D"],
             graph.adjacencyMap["D"])
+
+        val adjacencyMap2 = mapOf<String, Neighbours>()
+        val graph2 = Graph(adjacencyMap2)
+
+        assertEquals(0, graph2.vertexAmount)
+        assertEquals(0, graph2.edgeAmount)
     }
 }
