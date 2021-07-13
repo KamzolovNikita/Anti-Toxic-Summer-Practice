@@ -27,6 +27,9 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
     private lateinit var viewModel: AlgorithmViewModel
     private lateinit var adapter: AlgorithmStepAdapter
 
+    private var lastClickTime = 0L
+    private val clickTimeDelta = 500L
+
     private var xClick = 0
     private var yClick = 0
 
@@ -104,14 +107,16 @@ class AlgorithmFragment : Fragment(), VertexNameEntered, EdgeWeightEntered {
         }
 
         binding.fragmentAlgorithmFltCanvas.setOnClickListener {
-            if (viewModel.isEditing) {
-                val vertexNameDialogFragment = VertexNameDialogFragment(this)
-                activity?.let {
-                    vertexNameDialogFragment.show(it.supportFragmentManager, "New vertex")
+            val curClickTime = System.currentTimeMillis()
+            if(curClickTime - lastClickTime > clickTimeDelta) {
+                if (viewModel.isEditing) {
+                    val vertexNameDialogFragment = VertexNameDialogFragment(this)
+                    activity?.let {
+                        vertexNameDialogFragment.show(it.supportFragmentManager, "New vertex")
+                    }
                 }
             }
-
-
+            lastClickTime = curClickTime
         }
 
         viewModel.eventVertexAlreadyExist.observe(viewLifecycleOwner, {
