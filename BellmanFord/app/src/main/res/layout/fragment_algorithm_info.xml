@@ -40,7 +40,7 @@
                 style="@style/TextAppearance.Default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hello world!" />
+                android:text="@string/txt_algorithm_info_text" />
 
         </LinearLayout>
     </ScrollView>
