@@ -13,7 +13,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.bellmanford.R
-import java.lang.Math.*
+import java.lang.Math.toDegrees
+import java.lang.Math.toRadians
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.atan
@@ -117,10 +118,14 @@ class AlgorithmViewModel : ViewModel() {
     private var edgeArrowHeight = 0
     private var edgeArrowWidth = 0
     private var edgeWeightTextSize = 0
-    @DrawableRes private var defaultEdgeDrawable = 0
-    @DrawableRes private var defaultVertexDrawable = 0
-    @DrawableRes private var highlightedEdgeDrawable = 0
-    @DrawableRes private var highlightedVertexDrawable = 0
+    @DrawableRes
+    private var defaultEdgeDrawable = 0
+    @DrawableRes
+    private var defaultVertexDrawable = 0
+    @DrawableRes
+    private var highlightedEdgeDrawable = 0
+    @DrawableRes
+    private var highlightedVertexDrawable = 0
 
     private val adjacencyList = mutableMapOf<String, VertexInfo>()
     private lateinit var bellmanFordAlgorithm: BellmanFord
@@ -183,7 +188,7 @@ class AlgorithmViewModel : ViewModel() {
     }
 
     private fun vertexOnClickListener(vertexView: AppCompatButton) {
-        if(isEditing) {
+        if (isEditing) {
             val tempPair = _pressedVertices.value ?: Pair(null, null)
             when (vertexView) {
                 tempPair.first -> {
@@ -202,9 +207,8 @@ class AlgorithmViewModel : ViewModel() {
 
                 }
             }
-        }
-        else {
-            if(startVertexName == "") {
+        } else {
+            if (startVertexName == "") {
                 initGraph()
                 bellmanFordAlgorithm = BellmanFord(graph)
                 bellmanFordAlgorithm.runAlgorithm(vertexView.text.toString())
@@ -587,6 +591,19 @@ class AlgorithmViewModel : ViewModel() {
                 }
                 viewsList.add(vertexView)
                 adjacencyList.remove(vertexView.text.toString())
+
+                adjacencyList.forEach { (t, u) ->
+                    u.neighbours.forEach { neighbour ->
+                        if (neighbour.name == vertexView.text.toString()) {
+                            viewsList.add(neighbour.edgeView)
+                            viewsList.add(neighbour.firstArrowPetalView)
+                            viewsList.add(neighbour.secondArrowPetalView)
+                            viewsList.add(neighbour.weightView)
+                            u.neighbours.remove(neighbour)
+                        }
+                    }
+                }
+
                 println(adjacencyList)
                 return viewsList
             }
@@ -615,7 +632,7 @@ class AlgorithmViewModel : ViewModel() {
     }
 
     fun nextAlgorithmStep() {
-        if(!bellmanFordAlgorithm.hasNext()) {
+        if (!bellmanFordAlgorithm.hasNext()) {
             changePathColor(
                 highlightedPath,
                 defaultVertexDrawable,
@@ -646,7 +663,7 @@ class AlgorithmViewModel : ViewModel() {
             defaultVertexDrawable,
             defaultEdgeDrawable
         )
-        if(lastStep.stepMsg == StepMsg.PATH) {
+        if (lastStep.stepMsg == StepMsg.PATH) {
             highlightedPath = bellmanFordAlgorithm.getPath(
                 lastStep.stepData.secondVertexParam
             )
@@ -657,7 +674,7 @@ class AlgorithmViewModel : ViewModel() {
             )
         }
 
-        if(lastStep.stepMsg == StepMsg.NEGATIVE_CYCLE) {
+        if (lastStep.stepMsg == StepMsg.NEGATIVE_CYCLE) {
             changePathColor(
                 highlightedPath,
                 defaultVertexDrawable,
@@ -672,15 +689,19 @@ class AlgorithmViewModel : ViewModel() {
         }
     }
 
-    private fun changePathColor(path: List<String>, @DrawableRes vertexDrawable: Int, @DrawableRes edgeDrawable: Int) {
-        for(i in 0..path.size - 2) {
+    private fun changePathColor(
+        path: List<String>,
+        @DrawableRes vertexDrawable: Int,
+        @DrawableRes edgeDrawable: Int
+    ) {
+        for (i in 0..path.size - 2) {
             adjacencyList[path[i]]?.vertexView?.setBackgroundResource(vertexDrawable)
-            val edge = getNeighbour(path[i], path[i+1])
+            val edge = getNeighbour(path[i], path[i + 1])
             edge?.firstArrowPetalView?.setBackgroundResource(edgeDrawable)
             edge?.secondArrowPetalView?.setBackgroundResource(edgeDrawable)
             edge?.edgeView?.setBackgroundResource(edgeDrawable)
         }
-        if(path.isNotEmpty())
+        if (path.isNotEmpty())
             adjacencyList[path.last()]?.vertexView?.setBackgroundResource(vertexDrawable)
     }
 }
