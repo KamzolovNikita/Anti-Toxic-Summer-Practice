@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="infoViewModel"
+            type="com.example.android.bellmanford.info.AlgorithmInfoViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_grey">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_fragment_info_lt_start_end"
+            android:layout_marginEnd="@dimen/margin_fragment_info_lt_start_end"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/fragment_algorithm_info_img_btn_back"
+                style="@style/BackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_15dp"
+                android:contentDescription="@string/content_description_back_button"
+                android:onClick="@{() -> infoViewModel.onBackNavigate()}" />
+
+            <TextView
+                style="@style/TextAppearance.Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_algorithm_name" />
+
+            <TextView
+                style="@style/TextAppearance.Default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hello world!" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

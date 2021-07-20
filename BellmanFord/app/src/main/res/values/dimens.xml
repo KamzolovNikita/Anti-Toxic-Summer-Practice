@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- START FRAGMENT -->
+    <dimen name="height_fragment_start_button">45dp</dimen>
+    <dimen name="margin_top_fragment_start_button">15dp</dimen>
+    <dimen name="width_fragment_start_button">300dp</dimen>
+    <dimen name="text_size_fragment_start_button">22sp</dimen>
+
+    <dimen name="padding_fragment_start_logo">16dp</dimen>
+
+    <!-- DEVELOPERS FRAGMENT -->
+    <dimen name="margin_fragment_developers_lt_start_end">15dp</dimen>
+
+    <!-- ALGORITHM INFO FRAGMENT -->
+    <dimen name="margin_fragment_info_lt_start_end">15dp</dimen>
+
+
+    <!-- DIALOG -->
+    <dimen name="margin_dialog_16dp">16dp</dimen>
+
+    <!-- ALGORITHM FRAGMENT -->
+    <dimen name="size_fragment_algorithm_vertex">45dp</dimen>
+    <dimen name="height_fragment_algorithm_edge">4dp</dimen>
+
+    <dimen name="height_fragment_algorithm_arrow">4dp</dimen>
+    <dimen name="width_fragment_algorithm_arrow">12dp</dimen>
+    <dimen name="text_size_fragment_algorithm_edge_weight">20sp</dimen>
+
+    <!-- ANY FRAGMENT -->
+    <dimen name="text_size_header">42sp</dimen>
+    <dimen name="text_size_default">24sp</dimen>
+    <dimen name="margin_top_15dp">15dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
+</resources>
